@@ -1,0 +1,115 @@
+### Output as groups:
+> group_1	5
+10517-03,1779-04,1780-04,5685-04,6463-04
+> group_2	2
+12658-03,7135-04
+> group_3	2
+4724-03,4730-03
+> group_4	3
+10207-03,12655-03,3734-04
+> group_5	2
+1597-04,4523-03
+> group_6	2
+11818-03,4781-04
+> group_7	3
+5248-04,7517-04,7538-03
+> group_8	2
+10348-03,6639-04
+> group_9	5
+11822-03,1599-04,4148-04,4514-03,6467-04
+> ungrouped	65
+10010-03,10011-03,10012-03,10205-03,10206-03,10208-03,10349-03,10350-03,11096-03,11097-03,11821-03,12657-03,1322-04,1324-04,1327-04,1783-04,2509-04,3154-04,3156-04,3158-04,3160-04,3491-04,3494-04,3496-04,3497-04,3736-04,3859-03,3861-03,3865-03,4139-04,4145-04,420-04,421-04,4516-03,4518-03,4712-04,4714-04,4717-04,4779-04,4783-04,4785-04,5253-04,5468-03,5472-03,5687-04,5870-03,5872-03,6429-03,6435-03,6637-04,6640-04,6769-04,6771-04,6775-04,6892-04,6895-04,6897-04,7000-03,7514-04,7516-04,7520-04,8082-03,8864-03,8867-03,8868-03
+
+
+### Output as lists:
+10517-03	group_1
+1779-04	group_1
+1780-04	group_1
+5685-04	group_1
+6463-04	group_1
+12658-03	group_2
+7135-04	group_2
+4724-03	group_3
+4730-03	group_3
+10207-03	group_4
+12655-03	group_4
+3734-04	group_4
+1597-04	group_5
+4523-03	group_5
+11818-03	group_6
+4781-04	group_6
+5248-04	group_7
+7517-04	group_7
+7538-03	group_7
+10348-03	group_8
+6639-04	group_8
+11822-03	group_9
+1599-04	group_9
+4148-04	group_9
+4514-03	group_9
+6467-04	group_9
+10010-03	ungrouped
+10011-03	ungrouped
+10012-03	ungrouped
+10205-03	ungrouped
+10206-03	ungrouped
+10208-03	ungrouped
+10349-03	ungrouped
+10350-03	ungrouped
+11096-03	ungrouped
+11097-03	ungrouped
+11821-03	ungrouped
+12657-03	ungrouped
+1322-04	ungrouped
+1324-04	ungrouped
+1327-04	ungrouped
+1783-04	ungrouped
+2509-04	ungrouped
+3154-04	ungrouped
+3156-04	ungrouped
+3158-04	ungrouped
+3160-04	ungrouped
+3491-04	ungrouped
+3494-04	ungrouped
+3496-04	ungrouped
+3497-04	ungrouped
+3736-04	ungrouped
+3859-03	ungrouped
+3861-03	ungrouped
+3865-03	ungrouped
+4139-04	ungrouped
+4145-04	ungrouped
+420-04	ungrouped
+421-04	ungrouped
+4516-03	ungrouped
+4518-03	ungrouped
+4712-04	ungrouped
+4714-04	ungrouped
+4717-04	ungrouped
+4779-04	ungrouped
+4783-04	ungrouped
+4785-04	ungrouped
+5253-04	ungrouped
+5468-03	ungrouped
+5472-03	ungrouped
+5687-04	ungrouped
+5870-03	ungrouped
+5872-03	ungrouped
+6429-03	ungrouped
+6435-03	ungrouped
+6637-04	ungrouped
+6640-04	ungrouped
+6769-04	ungrouped
+6771-04	ungrouped
+6775-04	ungrouped
+6892-04	ungrouped
+6895-04	ungrouped
+6897-04	ungrouped
+7000-03	ungrouped
+7514-04	ungrouped
+7516-04	ungrouped
+7520-04	ungrouped
+8082-03	ungrouped
+8864-03	ungrouped
+8867-03	ungrouped
+8868-03	ungrouped
