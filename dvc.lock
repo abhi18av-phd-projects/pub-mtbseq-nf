@@ -1,0 +1,4 @@
+schema: '2.0'
+stages:
+  temp:
+    cmd: pwsh scripts/temp.ps1
