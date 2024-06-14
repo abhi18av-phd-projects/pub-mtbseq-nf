@@ -5,13 +5,16 @@
 
 stages:
   mtbseq-nf-normal-1:
-    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-normal-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-normal-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+    # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-normal-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
 
   mtbseq-nf-parallel-1:
-    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-parallel-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-parallel-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+    # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-parallel-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
 
   mtbseq-v110:
-    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+    cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+    # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
 
 # #=========================
 # ## Modal comparison with baseline MTBseq results
