@@ -23,17 +23,52 @@ param(
     $OutputName
 )
 
+
+#==============================
+# Functions
+#==============================
+
+function Add-Experiment {
+    param (
+        [string]$Name
+    )
+    $experiment = [PSCustomObject]@{
+        samples = @{}
+    }
+    $results.experiments[$Name] = $experiment
+    return $experiment
+}
+
+function Add-Sample {
+    param (
+        [PSCustomObject]$Experiment,
+        [string]$SampleID,
+        [hashtable]$Data
+    )
+    $Experiment.samples[$SampleID] = $Data
+}
+
 #==============================
 # MAIN
 #==============================
 
 
-$result = New-Object -Type PSObject
+
+
+
+$results = [PSCustomObject]@{
+    Experiments = @{}
+}
+
+
 
 $folders = Get-ChildItem -Path $foldersPrefix*
 foreach($folder in $folders){
 	$experimentName = $folder.name
+
 	Write-Host "Processing: $experimentName"
+
+        $experiment = Add-Experiment -Name $experimentName
 
 	$experimentStatistics = Get-Content "$folder/Statistics/Mapping_and_Variant_Statistics.tab" | Select-Object -Skip 1
 	
@@ -66,72 +101,15 @@ foreach($folder in $folders){
             "Insertions"                   = $line.split("`t")[21].replace("`'","")
             "Uncovered"                    = $line.split("`t")[22].replace("`'","")
             "Substitutions"                = $line.split("`t")[23].replace("`'","")
-		}
-	$result.$experimentName.$sampleID = $sampleObject
+         }
+       Add-Sample -Experiment $experiment -SampleID $sampleID -Data $sampleObject
+
+       $results | ConvertTo-Json -Depth 5 | Out-File $outputName
        
-
-#	Date    SampleID        LibraryID       FullID  Total Reads     Mapped Reads    % Mapped Reads  Genome Size     Genome GC       (Any) Total Bases       % (Any) Total Bases     (Any) GC-Content    (Any) Coverage mean     (Any) Coverage median   (Unambiguous) Total Bases       % (Unambiguous) Total Bases     (Unambiguous) GC-Content        (Unambiguous) Coverage mean     (Unambiguous) Coverage median       SNPs    Deletions       Insertions      Uncovered       Substitutions (Including Stop Codons)
-	
-	Write-Host $result
-
 
 	}
 
 
 
-
-
 }
-
-
-<# 
-
-Suggested json structure by abhinav:
-{ 
-
-mtbseq-nf-parallel-1: {
-	strain: {
-		sample: {
-			date: ,
-			sampleid: ,
-		} 
-	 },
-
-}
-
-mtbseq-nf-parallel-2: {
-	statistics: { 
-	 sample:{
-	 	date: ,
-		sampleid: ,
-    	 }
-	 },
-}}
-
-Acess example:
-
-mtbseq-nf-parallel-1.statistics.10010-03.coverageMean
-
-#>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
