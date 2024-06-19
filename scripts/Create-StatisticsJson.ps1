@@ -1,8 +1,8 @@
 <#Usage
 
 ./TSV-ToJson.ps1 `
-    -FoldersPrefix mtbseq-nf-normal `
-    -OutputName result.json 
+    -FoldersPrefix mtbseq `
+    -OutputName Statistics.json 
 
 # IMPORTANT: convert to json module is required to run this SCRIPT
 # Where FoldersPrefix is the initial prefix of each folder for this script look at statistics TSV files
@@ -35,7 +35,7 @@ function Add-Experiment {
     $experiment = [PSCustomObject]@{
         samples = @{}
     }
-    $results.Experiments[$Name] = $experiment
+    $results.experiments[$Name] = $experiment
     return $experiment
 }
 
@@ -45,6 +45,7 @@ function Add-Sample {
         [string]$SampleID,
         [hashtable]$Data
     )
+
     $Experiment.Samples[$SampleID] += $Data
 }
 
@@ -59,8 +60,6 @@ function Add-Sample {
 $results = [PSCustomObject]@{
     Experiments = @{}
 }
-
-
 
 $folders = Get-ChildItem -Path $foldersPrefix*
 foreach($folder in $folders){
