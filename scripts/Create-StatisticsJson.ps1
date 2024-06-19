@@ -45,7 +45,7 @@ function Add-Sample {
         [string]$SampleID,
         [hashtable]$Data
     )
-    $Experiment.Samples[$SampleID] = $Data
+    $Experiment.Samples[$SampleID] += $Data
 }
 
 #==============================
@@ -65,17 +65,14 @@ $results = [PSCustomObject]@{
 $folders = Get-ChildItem -Path $foldersPrefix*
 foreach($folder in $folders){
 	$experimentName = $folder.name
-
-	Write-Host "Processing: $experimentName"
-
-        $experiment = Add-Experiment -Name $experimentName
+    $experiment = Add-Experiment -Name $experimentName
     
 
     ## Add Statistics
 	$experimentStatistics = Get-Content "$folder/Statistics/Mapping_and_Variant_Statistics.tab" | Select-Object -Skip 1
-	
+	Write-Host "Processing: $experimentName Statistics"
 	foreach($line in $experimentStatistics){
-	
+	    
 	    $sampleID = $line.split("`t")[1].replace("`'","")
              
 	    $statisticsObject = @{
@@ -105,10 +102,12 @@ foreach($folder in $folders){
             "Substitutions"                = $line.split("`t")[23].replace("`'","")
         }
         Add-Sample -Experiment $experiment -SampleID $sampleID -Data $statisticsObject
-
+    }
     ## Add Classification
+    Write-Host "Processing: $experimentName Classifications"
     $experimentClassification = Get-Content "$folder/Classification/Strain_Classification.tab" | Select-Object -Skip 1
-
+    foreach($line in $experimentClassification){
+       $sampleID = $line.split("`t")[1].replace("`'","")
 	   $ClassificationObject = @{
             "ClassificationDate"           = $line.split("`t")[0].replace("`'","")
             "ClassificationSampleID"       = $line.split("`t")[1].replace("`'","")
@@ -129,14 +128,23 @@ foreach($folder in $folders){
          }
 
         Add-Sample -Experiment $experiment -SampleID $sampleID -Data $ClassificationObject
-        
+	}
+    ## Add Group 
+    Write-Host "Processing: $experimentName Groups"
+    
+    $experimentGroup = Get-Content "$folder/Groups/*_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12_d12.groups"
+    $trimAt = ($experimentGroup | Select-String "### Output as lists").LineNumber 
+    foreach($line in ($experimentGroup | Select-Object -Skip $trimAt)){
+        $sampleID = $line.split("`t")[0].replace("`'","")
+        $GroupObject = @{
+            "Group" = $line.split("`t")[1].replace("`'","")
+        }
+        Add-Sample -Experiment $experiment -SampleID $sampleID -Data $GroupObject
+    }
        
 
-	}
-
-
-
 }
+
 
 $results | ConvertTo-Json -Depth 5 | Out-File $outputName
 
