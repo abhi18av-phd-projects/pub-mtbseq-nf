@@ -18,7 +18,7 @@ stages:
 
 
   merge-stats:
-    cmd: pwsh ./scripts/TSV-ToJson.ps1 -FoldersPrefix mtbseq -OutputName all-exp-merged-statistics.json
+    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq -OutputName Statistics.json
 
 
 # #=========================
