@@ -11,5 +11,5 @@ stages:
   mtbseq-v110:
     cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
   merge-stats:
-    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq -OutputName
-      Statistics.json
+    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq-v110-conda-baseline
+      -OutputName Statistics.json
