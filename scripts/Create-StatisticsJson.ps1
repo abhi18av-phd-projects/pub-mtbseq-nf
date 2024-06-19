@@ -35,7 +35,7 @@ function Add-Experiment {
     $experiment = [PSCustomObject]@{
         samples = @{}
     }
-    $results.experiments[$Name] = $experiment
+    $results.Experiments[$Name] = $experiment
     return $experiment
 }
 
@@ -45,7 +45,7 @@ function Add-Sample {
         [string]$SampleID,
         [hashtable]$Data
     )
-    $Experiment.samples[$SampleID] = $Data
+    $Experiment.Samples[$SampleID] = $Data
 }
 
 #==============================
@@ -69,18 +69,20 @@ foreach($folder in $folders){
 	Write-Host "Processing: $experimentName"
 
         $experiment = Add-Experiment -Name $experimentName
+    
 
+    ## Add Statistics
 	$experimentStatistics = Get-Content "$folder/Statistics/Mapping_and_Variant_Statistics.tab" | Select-Object -Skip 1
 	
 	foreach($line in $experimentStatistics){
 	
-	$sampleID = $line.split("`t")[1].replace("`'","")
+	    $sampleID = $line.split("`t")[1].replace("`'","")
              
-	$sampleObject = @{
-            "Date"                         = $line.split("`t")[0].replace("`'","")
-            "SampleID"                     = $line.split("`t")[1].replace("`'","")
-            "LibraryID"                    = $line.split("`t")[2].replace("`'","")
-            "FullID"                       = $line.split("`t")[3].replace("`'","")
+	    $statisticsObject = @{
+            "StatisticsDate"               = $line.split("`t")[0].replace("`'","")
+            "StatisticsSampleID"           = $line.split("`t")[1].replace("`'","")
+            "StatisticsLibraryID"          = $line.split("`t")[2].replace("`'","")
+            "StatisticsFullID"             = $line.split("`t")[3].replace("`'","")
             "TotalReads"                   = $line.split("`t")[4].replace("`'","")
             "MappedReads"                  = $line.split("`t")[5].replace("`'","")
             "MappedReadsPercent"           = $line.split("`t")[6].replace("`'","")
@@ -101,10 +103,33 @@ foreach($folder in $folders){
             "Insertions"                   = $line.split("`t")[21].replace("`'","")
             "Uncovered"                    = $line.split("`t")[22].replace("`'","")
             "Substitutions"                = $line.split("`t")[23].replace("`'","")
-         }
-       Add-Sample -Experiment $experiment -SampleID $sampleID -Data $sampleObject
+        }
+        Add-Sample -Experiment $experiment -SampleID $sampleID -Data $statisticsObject
 
-       $results | ConvertTo-Json -Depth 5 | Out-File $outputName
+    ## Add Classification
+    $experimentClassification = Get-Content "$folder/Classification/Strain_Classification.tab" | Select-Object -Skip 1
+
+	   $ClassificationObject = @{
+            "ClassificationDate"           = $line.split("`t")[0].replace("`'","")
+            "ClassificationSampleID"       = $line.split("`t")[1].replace("`'","")
+            "ClassificationLibraryID"      = $line.split("`t")[2].replace("`'","")
+            "ClassificationFullID"         = $line.split("`t")[3].replace("`'","")
+            "HomolkaSpecies"               = $line.split("`t")[4].replace("`'","")
+            "HomolkaLineage"               = $line.split("`t")[5].replace("`'","")
+            "HomolkaGroup"                 = $line.split("`t")[6].replace("`'","")
+            "Quality"                      = $line.split("`t")[7].replace("`'","")
+            "CollLineageBranch"            = $line.split("`t")[8].replace("`'","")
+            "CollLineageNameBranch"        = $line.split("`t")[9].replace("`'","")
+            "CollQualityBranch"            = $line.split("`t")[10].replace("`'","")
+            "CollLineageEasy"              = $line.split("`t")[11].replace("`'","")
+            "CollLineageNameEasy"          = $line.split("`t")[12].replace("`'","")
+            "CollQualityEasy"              = $line.split("`t")[13].replace("`'","")
+            "BeijingLineageEasy"           = $line.split("`t")[14].replace("`'","")
+            "BeijingQualityEasy"           = $line.split("`t")[15].replace("`'","")
+         }
+
+        Add-Sample -Experiment $experiment -SampleID $sampleID -Data $ClassificationObject
+        
        
 
 	}
@@ -112,4 +137,6 @@ foreach($folder in $folders){
 
 
 }
+
+$results | ConvertTo-Json -Depth 5 | Out-File $outputName
 
