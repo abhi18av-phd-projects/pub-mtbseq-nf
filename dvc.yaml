@@ -18,7 +18,7 @@ stages:
 
 
   merge-stats:
-    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq-v110-conda-baseline -OutputName Statistics.json
+    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq -OutputName Statistics.json
 
 
 # #=========================
