@@ -62,7 +62,7 @@ $results = [PSCustomObject]@{
 
 
 
-$folders = Get-ChildItem -Path $foldersPrefix*
+$folders = Get-ChildItem -Path $foldersPrefix* | Sort-Object
 foreach ($folder in $folders) {
     $experimentName = $folder.name
 
