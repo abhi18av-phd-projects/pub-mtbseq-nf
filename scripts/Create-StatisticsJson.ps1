@@ -124,7 +124,7 @@ foreach ($folder in $folders) {
         $experiment.classification[$sampleID] += $classificationObject
     }
 
-    ## Add Group 
+    ## Add Group (clusters)
     Write-Host "Processing: $experimentName Groups"
     
     $experimentGroup = Get-Content "$folder/Groups/*_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12_d12.groups"
@@ -136,7 +136,20 @@ foreach ($folder in $folders) {
         }
         $experiment.group[$sampleID] += $groupObject
     }
-       
+    ## Add Group (Matrix)
+    $experimentMatrix = Get-Content "$folder/Groups/*_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.matrix"  | Select-Object -Skip 1
+    foreach ($line in $experimentMatrix ) {
+        $sampleID = $line.split("`t")[0].replace("`'", "").split("_")[0]
+         
+        $matrixObject = @{
+            "matrix" = ($line.split("`t") | Select-Object -Skip 1)  -join "`t"
+        }
+        $experiment.group[$sampleID] += $matrixObject
+    }
+
+
+
+
 
 }
 
