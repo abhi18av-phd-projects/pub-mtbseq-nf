@@ -9,22 +9,6 @@ custom_data:
     pconfig:
       id: 'strain_classification'
       namespace: "strain classification"
-      columns:
-        - { name: 'SampleID', type: 'text' }
-        - { name: 'LibraryID', type: 'text' }
-        - { name: 'FullID', type: 'text' }
-        - { name: 'Homolka species', type: 'text' }
-        - { name: 'Homolka lineage', type: 'text' }
-        - { name: 'Homolka group', type: 'text' }
-        - { name: 'Quality', type: 'text' }
-        - { name: 'Coll lineage (branch)', type: 'text' }
-        - { name: 'Coll lineage_name (branch)', type: 'text' }
-        - { name: 'Coll quality (branch)', type: 'text' }
-        - { name: 'Coll lineage (easy)', type: 'text' }
-        - { name: 'Coll lineage_name (easy)', type: 'text' }
-        - { name: 'Coll quality (easy)', type: 'text' }
-        - { name: 'Beijing lineage (easy)', type: 'text' }
-        - { name: 'Beijing quality (easy)', type: 'text' }
 
   mapping_statistics:
     section_name: 'Mapping and Variant Statistics'
@@ -33,30 +17,6 @@ custom_data:
     pconfig:
       id: 'mapping_statistics'
       namespace: "Mapping and Variant Statistics"
-      columns:
-        - { name: 'SampleID', type: 'text' }
-        - { name: 'LibraryID', type: 'text' }
-        - { name: 'FullID', type: 'text' }
-        - { name: 'Total Reads', type: 'number'}
-        - { name: 'Mapped Reads', type: 'number'}
-        - { name: '% Mapped Reads', type: 'number', format: '{:.2%}' }
-        - { name: 'Genome Size', type: 'number'}
-        - { name: 'Genome GC', type: 'number', format: '{:.2f%}' }
-        - { name: '(Any) Total Bases', type: 'number', format: '{:,.0f}' }
-        - { name: '% (Any) Total Bases', type: 'number', format: '{:.2%}' }
-        - { name: '(Any) GC-Content', type: 'number', format: '{:.2f}' }
-        - { name: '(Any) Coverage mean', type: 'number', format: '{:.2f}' }
-        - { name: '(Any) Coverage median', type: 'number', format: '{:.2f}' }
-        - { name: '(Unambiguous) Total Bases', type: 'number', format: '{:,.0f}' }
-        - { name: '% (Unambiguous) Total Bases', type: 'number', format: '{:.2%}' }
-        - { name: '(Unambiguous) GC-Content', type: 'number', format: '{:.2f}' }
-        - { name: '(Unambiguous) Coverage mean', type: 'number', format: '{:.2f}' }
-        - { name: '(Unambiguous) Coverage median', type: 'number', format: '{:.2f}' }
-        - { name: 'SNPs', type: 'number'}
-        - { name: 'Deletions', type: 'number'}
-        - { name: 'Insertions', type: 'number'}
-        - { name: 'Uncovered', type: 'number'}
-        - { name: 'Substitutions (Including Stop Codons)', type: 'number'}
 
   groups:
     section_name: 'Sample Clustering Groups'
