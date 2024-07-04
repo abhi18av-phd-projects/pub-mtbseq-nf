@@ -1,0 +1,92 @@
+SampleID	LibraryID	FullID	Homolka species	Homolka lineage	Homolka group	Quality	Coll lineage (branch)	Coll lineage_name (branch)	Coll quality (branch)	Coll lineage (easy)	Coll lineage_name (easy)	Coll quality (easy)	Beijing lineage (easy)	Beijing quality (easy)
+10010-03	lib951	10010-03_lib951	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
+10011-03	lib914	10011-03_lib914	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+10012-03	lib970	10012-03_lib970	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+10205-03	lib915	10205-03_lib915	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+10206-03	lib916	10206-03_lib916	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+10207-03	lib973	10207-03_lib973	M. tuberculosis	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	unknown	good
+10208-03	lib1613	10208-03_lib1613	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+10348-03	lib917	10348-03_lib917	M. tuberculosis	4.3	LAM	good	4.3.4.2	LAM	good	4.3.4.2	LAM	good	unknown	good
+10349-03	lib924	10349-03_lib924	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+10350-03	lib1470	10350-03_lib1470	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+10517-03	lib939	10517-03_lib939	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+11096-03	lib940	11096-03_lib940	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+11097-03	lib933	11097-03_lib933	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+11818-03	lib902	11818-03_lib902	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+11821-03	lib952	11821-03_lib952	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
+11822-03	lib903	11822-03_lib903	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+12655-03	lib1516	12655-03_lib1516	M. tuberculosis	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	unknown	good
+12657-03	lib934	12657-03_lib934	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+12658-03	lib1469	12658-03_lib1469	M. tuberculosis	2	Beijing	good	2.2.1	Beijing	good	2.2.1	Beijing	good	Ancestral 3	good
+1322-04	lib925	1322-04_lib925	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+1324-04	lib931	1324-04_lib931	M. tuberculosis	4.4.1.1	S-type	good	4.4.1.1	S-type	good	4.4.1.1	S-type	good	unknown	good
+1327-04	lib957	1327-04_lib957	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+1597-04	lib918	1597-04_lib918	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+1599-04	lib974	1599-04_lib974	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+1779-04	lib941	1779-04_lib941	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+1780-04	lib942	1780-04_lib942	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+1783-04	lib936	1783-04_lib936	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+2509-04	lib1471	2509-04_lib1471	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+3154-04	lib905	3154-04_lib905	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+3156-04	lib926	3156-04_lib926	M. tuberculosis	unknown	Clade 1	good	4.1.1.3	X-type	good	4.1.1.3	X-type	good	unknown	good
+3158-04	lib943	3158-04_lib943	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+3160-04	lib958	3160-04_lib958	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+3491-04	lib897	3491-04_lib897	M. tuberculosis	1	EAI	good	1.1.1	EAI	bad	1.1.1	EAI	bad	unknown	good
+3494-04	lib953	3494-04_lib953	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
+3496-04	lib906	3496-04_lib906	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+3497-04	lib927	3497-04_lib927	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+3734-04	lib895	3734-04_lib895	M. tuberculosis	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	unknown	good
+3736-04	lib937	3736-04_lib937	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+3859-03	lib921	3859-03_lib921	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+3861-03	lib922	3861-03_lib922	M. tuberculosis	unknown	Clade 1	good	4.6	Euro-American	good	4.6	Euro-American	good	unknown	good
+3865-03	lib971	3865-03_lib971	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+4139-04	lib959	4139-04_lib959	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+4145-04	lib919	4145-04_lib919	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+4148-04	lib907	4148-04_lib907	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+420-04	lib935	420-04_lib935	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+421-04	lib956	421-04_lib956	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+4514-03	lib901	4514-03_lib901	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+4516-03	lib947	4516-03_lib947	M. tuberculosis	unknown	Clade 1	good	4.1.1.1	X-type	good	4.1.1.1	X-type	good	unknown	good
+4518-03	lib949	4518-03_lib949	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
+4523-03	lib972	4523-03_lib972	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+4712-04	lib960	4712-04_lib960	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+4714-04	lib1472	4714-04_lib1472	M. tuberculosis	4.4.1.1	S-type	good	4.4.1.1	S-type	good	4.4.1.1	S-type	good	unknown	good
+4717-04	lib898	4717-04_lib898	M. tuberculosis	1	EAI	good	1.1.1	EAI	bad	1.1.1	EAI	bad	unknown	good
+4724-03	lib1517	4724-03_lib1517	M. tuberculosis	2	Beijing	good	2.2.1	Beijing	good	2.2.1	Beijing	good	Ancestral 3	good
+4730-03	libNA	4730-03_libNA	M. tuberculosis	2	Beijing	good	2.2.1	Beijing	good	2.2.1	Beijing	good	Ancestral 3	good
+4779-04	lib944	4779-04_lib944	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+4781-04	lib908	4781-04_lib908	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+4783-04	lib896	4783-04_lib896	M. tuberculosis	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	4.6.2.2	Cameroon	good	unknown	good
+4785-04	lib909	4785-04_lib909	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+5248-04	lib928	5248-04_lib928	M. tuberculosis	unknown	Clade 1	good	4.1.1.3	X-type	good	4.1.1.3	X-type	good	unknown	good
+5253-04	lib961	5253-04_lib961	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+5468-03	lib912	5468-03_lib912	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+5472-03	lib938	5472-03_lib938	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+5685-04	lib945	5685-04_lib945	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+5687-04	lib946	5687-04_lib946	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+5870-03	lib966	5870-03_lib966	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+5872-03	lib900	5872-03_lib900	M. tuberculosis	unknown	Ghana	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+6429-03	lib923	6429-03_lib923	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+6435-03	lib955	6435-03_lib955	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+6463-04	lib910	6463-04_lib910	M. tuberculosis	unknown	Clade 1	good	4.8	mainly T	good	4.8	mainly T	good	unknown	good
+6467-04	lib1450	6467-04_lib1450	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+6637-04	lib899	6637-04_lib899	M. tuberculosis	1	EAI	good	1.1.1	EAI	bad	1.1.1	EAI	bad	unknown	good
+6639-04	lib965	6639-04_lib965	M. tuberculosis	4.3	LAM	good	4.3.4.2	LAM	good	4.3.4.2	LAM	good	unknown	good
+6640-04	lib929	6640-04_lib929	M. tuberculosis	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	4.1.2.1	Haarlem	good	unknown	good
+6769-04	lib962	6769-04_lib962	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+6771-04	lib1462	6771-04_lib1462	M. tuberculosis	4.4.1.1	S-type	good	4.4.1.1	S-type	good	4.4.1.1	S-type	good	unknown	good
+6775-04	lib963	6775-04_lib963	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+6892-04	lib964	6892-04_lib964	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+6895-04	lib1459	6895-04_lib1459	M. tuberculosis	1	EAI	good	1.1.1	EAI	bad	1.1.1	EAI	bad	unknown	good
+6897-04	lib954	6897-04_lib954	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
+7000-03	lib913	7000-03_lib913	M. tuberculosis	4.3	LAM	good	4.3.4.2	LAM	good	4.3.4.2	LAM	good	unknown	good
+7135-04	lib987	7135-04_lib987	M. tuberculosis	2	Beijing	good	2.2.1	Beijing	good	2.2.1	Beijing	good	Ancestral 3	good
+7514-04	lib1460	7514-04_lib1460	M. tuberculosis	4.3	LAM	good	4.3.4.1	LAM	good	4.3.4.1	LAM	good	unknown	good
+7516-04	lib920	7516-04_lib920	M. tuberculosis	4.3	LAM	good	4.3.4.1	LAM	good	4.3.4.1	LAM	good	unknown	good
+7517-04	lib930	7517-04_lib930	M. tuberculosis	unknown	Clade 1	good	4.1.1.3	X-type	good	4.1.1.3	X-type	good	unknown	good
+7520-04	lib1461	7520-04_lib1461	M. tuberculosis	4.3	LAM	good	4.3.3	LAM	good	4.3.3	LAM	good	unknown	good
+7538-03	lib948	7538-03_lib948	M. tuberculosis	unknown	Clade 1	good	4.1.1.3	X-type	good	4.1.1.3	X-type	good	unknown	good
+8082-03	lib932	8082-03_lib932	M. tuberculosis	unknown	Clade 1	good	4.1	Euro-American	good	4.1	Euro-American	good	unknown	good
+8864-03	lib967	8864-03_lib967	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+8867-03	lib968	8867-03_lib968	M. africanum	6	West African 2	good	6	West-Africa 2	good	6	West-Africa 2	good	unknown	good
+8868-03	lib950	8868-03_lib950	M. africanum	5	West African 1a	good	5	West-Africa 1	bad	5	West-Africa 1	bad	unknown	good
