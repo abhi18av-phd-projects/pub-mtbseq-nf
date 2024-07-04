@@ -65,10 +65,7 @@ custom_data:
     pconfig:
       id: 'groups'
       namespace: "Sample Clustering Groups"
-      columns:
-        - { name: 'Sample ID', type: 'text' }
-        - { name: 'Group', type: 'text' }
-        
+   
   
   distance_matrix:
     section_name: "Sample SNP distance"
