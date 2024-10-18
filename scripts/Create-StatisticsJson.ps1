@@ -1,6 +1,6 @@
 <#Usage
 
-./TSV-ToJson.ps1 `
+./Create-Statistics.ps1 `
     -FoldersPrefix mtbseq `
     -OutputName Statistics.json 
 
@@ -57,9 +57,18 @@ foreach ($folder in $folders) {
     $experiment = Add-Experiment -Name $experimentName
     
 
-    ## Add Statistics
-    $experimentStatistics = Get-Content "$folder/Statistics/Mapping_and_Variant_Statistics.tab" | Select-Object -Skip 1
+        ## Add Statistics
+        if ($folder.ToString().Contains("parallel")) {
+            $finalFolder = "tbstats/Statistics"
+        } elseif ($folder.ToString().Contains("standard")) {
+            $finalFolder = "Statistics"
+        } else {
+            $finalFolder = "tbfull/Statistics"
+        }
+
     Write-Host "Processing: $experimentName Statistics"
+    Write-Host "$folder => $finalFolder"
+    $experimentStatistics = Get-Content "$folder/$finalFolder/Mapping_and_Variant_Statistics.tab" | Select-Object -Skip 1
     foreach ($line in $experimentStatistics) {
 	    
         $sampleID = $line.split("`t")[1].replace("`'", "")
@@ -95,9 +104,19 @@ foreach ($folder in $folders) {
 
     }
 
-    ## Add Classification
-    Write-Host "Processing: $experimentName Classifications"
-    $experimentClassification = Get-Content "$folder/Classification/Strain_Classification.tab" | Select-Object -Skip 1
+
+        ## Add Classification
+        Write-Host "Processing: $experimentName Classifications"
+        if ($folder.ToString().Contains("parallel")) {
+            $finalFolder = "tbstrains/Classification"
+        } elseif ($folder.ToString().Contains("standard")) {
+            $finalFolder = "Classification"
+        } else {
+            $finalFolder = "tbfull/Classification"
+        }
+
+    Write-Host "$folder => $finalFolder"
+    $experimentClassification = Get-Content "$folder/$finalFolder/Strain_Classification.tab" | Select-Object -Skip 1
     foreach ($line in $experimentClassification) {
         $sampleID = $line.split("`t")[1].replace("`'", "")
 
@@ -125,9 +144,18 @@ foreach ($folder in $folders) {
     }
 
     ## Add Group (clusters)
-    Write-Host "Processing: $experimentName Groups"
+        Write-Host "Processing: $experimentName Group"
+        if ($folder.ToString().Contains("parallel")) {
+            $finalFolder = "tbgroups/Groups"
+        } elseif ($folder.ToString().Contains("standard")) {
+            $finalFolder = "Groups"
+        } else {
+            $finalFolder = "tbgroups/Groups"
+        }
+
+    Write-Host "$folder => $finalFolder"
     
-    $experimentGroup = Get-Content "$folder/Groups/*_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12_d12.groups"
+    $experimentGroup = Get-Content "$folder/$finalFolder/*_joint_*.groups"
     $trimAt = ($experimentGroup | Select-String "### Output as lists").LineNumber 
     foreach ($line in ($experimentGroup | Select-Object -Skip $trimAt)) {
         $sampleID = $line.split("`t")[0].replace("`'", "")
@@ -136,18 +164,18 @@ foreach ($folder in $folders) {
         }
         $experiment.group[$sampleID] += $groupObject
     }
-    ## Add Group (Matrix)
-    $experimentMatrix = Get-Content "$folder/Groups/*_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.matrix"  | Select-Object -Skip 1
-    foreach ($line in $experimentMatrix ) {
-        $sampleID = $line.split("`t")[0].replace("`'", "").split("_")[0]
+
+
+    # ## Add Group (Matrix)
+    # $experimentMatrix = Get-Content "$folder/tbgroups/Groups/*_joint_*.matrix"  | Select-Object -Skip 1
+    # foreach ($line in $experimentMatrix ) {
+    #     $sampleID = $line.split("`t")[0].replace("`'", "").split("_")[0]
          
-        $matrixObject = @{
-            "matrix" = ($line.split("`t") | Select-Object -Skip 1)  -join "`t"
-        }
-        $experiment.group[$sampleID] += $matrixObject
-    }
-
-
+    #     $matrixObject = @{
+    #         "matrix" = ($line.split("`t") | Select-Object -Skip 1)  -join "`t"
+    #     }
+    #     $experiment.group[$sampleID] += $matrixObject
+    # }
 
 
 
