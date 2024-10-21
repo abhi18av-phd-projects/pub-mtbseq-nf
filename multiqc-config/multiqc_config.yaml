@@ -25,6 +25,7 @@ custom_data:
     pconfig:
       id: 'groups'
       namespace: "Sample Clustering Groups"
+   
   
   distance_matrix:
     section_name: "Sample SNP distance"
@@ -32,15 +33,14 @@ custom_data:
     id: 'distance_matrix'
     pconfig:
       id: 'distance_matrix'
-      namespace: 'Sample SNP distance'
 
 sp:
   strain_classification:
-    fn: "Strain_Classification.tab"
+    fn: "Strain_Classification.formatted.tab"
   mapping_statistics:
-    fn: "Mapping_and_Variant_Statistics.tab"
+    fn: "Mapping_and_Variant_Statistics.formatted.tab"
   groups:
     fn: "*groups"
   distance_matrix:
-    fn: "*_reorganized.matrix"
+    fn: "reorganized.matrix"
 

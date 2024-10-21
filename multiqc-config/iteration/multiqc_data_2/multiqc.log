@@ -1,0 +1,12 @@
+[2024-07-04 13:39:50,848] multiqc.config                                     [INFO   ]  Loading config settings from: multiqc_config.yaml
+[2024-07-04 13:39:51,257] multiqc.core.file_search                           [INFO   ]  Search path: /workspaces/mtbseq-nf-publication-analysis/multiqc-config/multiqc-test-data
+[2024-07-04 13:39:51,257] multiqc.core.file_search                           [INFO   ]  Only using modules: custom_content
+[2024-07-04 13:39:51,301] multiqc.modules.custom_content.custom_content      [INFO   ]  strain_classification: Found 1 samples (table)
+[2024-07-04 13:39:51,317] multiqc.modules.custom_content.custom_content      [INFO   ]  mapping_statistics: Found 1 samples (table)
+[2024-07-04 13:39:51,323] multiqc.modules.custom_content.custom_content      [INFO   ]  groups: Found 1 samples (table)
+[2024-07-04 13:39:51,329] multiqc.modules.custom_content.custom_content      [INFO   ]  distance_matrix: Found 32 samples (heatmap)
+[2024-07-04 13:39:51,329] multiqc.core.file_search                           [INFO   ]  Only using modules: custom_content
+[2024-07-04 13:39:51,329] multiqc.core.write_results                         [INFO   ]  Existing reports found, adding suffix to filenames. Use '--force' to overwrite.
+[2024-07-04 13:39:51,344] multiqc.core.write_results                         [INFO   ]  Data        : iteration/multiqc_data_2
+[2024-07-04 13:39:51,459] multiqc.core.write_results                         [INFO   ]  Report      : iteration/multiqc_report_2.html
+[2024-07-04 13:39:51,465] multiqc.multiqc                                    [INFO   ]  MultiQC complete
