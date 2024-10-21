@@ -167,15 +167,26 @@ foreach ($folder in $folders) {
 
 
     # ## Add Group (Matrix)
-    # $experimentMatrix = Get-Content "$folder/tbgroups/Groups/*_joint_*.matrix"  | Select-Object -Skip 1
-    # foreach ($line in $experimentMatrix ) {
-    #     $sampleID = $line.split("`t")[0].replace("`'", "").split("_")[0]
+        Write-Host "Processing: $experimentName Matrix"
+        if ($folder.ToString().Contains("parallel")) {
+            $finalFolder = "tbgroups/Groups"
+        } elseif ($folder.ToString().Contains("standard")) {
+            $finalFolder = "Groups"
+        } else {
+            $finalFolder = "tbgroups/Groups"
+        }
+
+    Write-Host "$folder => $finalFolder"
+    
+    $experimentMatrix = Get-Content "$folder/$finalFolder/*_joint_*.matrix"  | Select-Object -Skip 1
+    foreach ($line in $experimentMatrix ) {
+        $sampleID = $line.split("`t")[0].replace("`'", "").split("_")[0]
          
-    #     $matrixObject = @{
-    #         "matrix" = ($line.split("`t") | Select-Object -Skip 1)  -join "`t"
-    #     }
-    #     $experiment.group[$sampleID] += $matrixObject
-    # }
+        $matrixObject = @{
+            "matrix" = ($line.split("`t") | Select-Object -Skip 1)  -join "`t"
+        }
+        $experiment.group[$sampleID] += $matrixObject
+    }
 
 
 
