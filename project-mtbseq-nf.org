@@ -1,0 +1,11 @@
+* PROJECT mtbseq-nf
+
+#+transclude: [[file:misc/meetings-mtbseq-nf.org]]
+
+#+transclude: [[file:analysis/data/data-mtbseq-nf.org]]
+
+#+transclude: [[file:analysis/notebooks/experiments-mtbseq-nf.org]]
+
+#+transclude: [[file:writeup/writeup-mtbseq-nf.org]]
+
+#+transclude: [[file:analysis/scripts/scripts-mtbseq-nf.org]]
