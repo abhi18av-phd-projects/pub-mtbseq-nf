@@ -1,0 +1,129 @@
+#=========================
+## IQTREE generation
+#=========================
+
+
+download 
+  nextflow run nf-core/fetchngs --input ids.csv -profile docker --outdir publication --download_method sratools
+
+stages:
+  # mtbseq-nf-normal-1:
+  #   cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-normal-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+  #   # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-normal-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+
+  # mtbseq-nf-parallel-1:
+  #   cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-parallel-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+  #   # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-nf-parallel-1/Amend mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+
+  # mtbseq-v110:
+  #   cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo.fasta
+  #   # cmd: pwsh ./scripts/iqtree.ps1 mtbseq-v110-conda-baseline/Amend NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.fasta
+
+
+  merge-stats:
+    cmd: pwsh ./scripts/Create-StatisticsJson.ps1 -FoldersPrefix mtbseq -OutputName Statistics.json
+
+
+# #=========================
+# ## Modal comparison with baseline MTBseq results
+# #=========================
+
+# # MTBseq/CONDA vs  MTBSeq-nf/NORMAL
+
+# #### AMEND
+
+# delta `
+#     mtbseq-v110-conda-baseline/Amend/NONE_joint_cf4_cr4_fr75_ph4_samples91_amended.tab `
+#     mtbseq-nf-normal-1/Amend/mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended.tab  
+
+# #### CLASSIFICATION
+
+# delta `
+#     mtbseq-v110-conda-baseline/Classification/Strain_Classification.tab `
+#     mtbseq-nf-normal-1/Classification/Strain_Classification.tab      
+
+
+# #### GROUPS
+
+# delta `
+#     mtbseq-v110-conda-baseline/Groups/NONE_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.matrix `
+#     mtbseq-nf-normal-1/Groups/mtbseqnf_joint_cf4_cr4_fr75_ph4_samples91_amended_u95_phylo_w12.matrix
+
+# #### JOINT
+# #### STATISTICS
+
+
+#=========================
+#=========================
+
+
+# MTBseq/CONDA vs  MTBSeq-nf/PARALLEL
+
+#=========================
+## Intermodal comparison of consistency results 
+#=========================
+
+# MTBseq-nf/NORMAL vs  MTBSeq-nf/PARALLEL
+
+
+#=========================
+## Intramodal comparison for reproducibility
+#=========================
+
+# MTBseq-nf/NORMAL-1 vs  MTBseq-nf/NORMAL-2
+
+
+
+
+# vars:
+#   - genes_per_pca: 1
+#   - output_pca: "results"
+#   - output_automl: "results"
+#   # - final_pca_genes: 2
+
+# stages:
+#   temp:
+#     # deps:
+#       # - /Users/abhi/projects/wal-yan-cystic-fibrosis-ml/preprocessed_patricia/merged_count_metav2.csv
+#     # outs:
+#       # - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv
+#     # cmd: micromamba run -p /Users/abhi/rminiconda/envs/r-reticulate  Rscript pca.R -n 3
+#     cmd: pwsh scripts/temp.ps1
+
+  # eda-initial:
+  #   deps:
+  #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv
+  #   outs:
+  #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_ydata_profile.html
+  #   # cmd: micromamba run -p /Users/abhi/rminiconda/envs/r-reticulate  Rscript pca.R -n 3
+  #   cmd: ydata_profiling ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_ydata_profile.html
+
+  # automl:
+  #   deps:
+  #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv
+  #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/leader_model/automl_leader_model
+  #   cmd: micromamba run -p /Users/abhi/rminiconda/envs/r-reticulate python3 automl.py --genes_csv ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv --output_dir ${output_pca}/${genes_per_pca}_genes_per_pca_initial/
+  #   # outs:
+  #   # - ${genes_per_pca}_genes_table.csv
+
+  # leader-model:
+  #   deps:
+  #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv
+  #   cmd: micromamba run -p /Users/abhi/rminiconda/envs/r-reticulate python3 leader_model.py --model_path ${output_pca}/${genes_per_pca}_genes_per_pca_initial/leader_model/automl_leader_model  --genes_csv ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv --output_dir ${output_pca}/${genes_per_pca}_genes_per_pca_initial/
+  #   # outs:
+  #   # - ${genes_per_pca}_genes_table.csv
+
+  # # pca-final:
+  # #   deps:
+  # #     - ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv
+  # #   outs:
+  # #     - ${output_pca}/${genes_per_pca}_genes_per_pca_final/${final_pca_genes}_genes_final_dataset.csv
+  # #   cmd: Rscript pca-final.R -i ${output_pca}/${genes_per_pca}_genes_per_pca_initial/${genes_per_pca}_genes_final_dataset.csv -o ${output_pca}/${genes_per_pca}_genes_per_pca_final
+
+  # # eda-final:
+  # #   deps:
+  # #     - ${output_pca}/${genes_per_pca}_genes_per_pca_final/${final_pca_genes}_genes_final_dataset.csv
+  # #   outs:
+  # #     - ${output_pca}/${genes_per_pca}_genes_per_pca_final/${final_pca_genes}_genes_ydata_profile.html
+  # #   # cmd: micromamba run -p /Users/abhi/rminiconda/envs/r-reticulate  Rscript pca.R -n 3
+  # #   cmd: ydata_profiling ${output_pca}/${genes_per_pca}_genes_per_pca_final/${final_pca_genes}_genes_final_dataset.csv ${output_pca}/${genes_per_pca}_genes_per_pca_final/${final_pca_genes}_genes_ydata_profile.html
