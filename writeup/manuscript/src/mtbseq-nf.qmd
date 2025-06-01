@@ -1,0 +1,423 @@
+---
+always_allow_html: yes
+title: "MTBseq-nf: Enabling Scalable Tuberculosis Genomics “Big Data” Analysis through a User-Friendly Nextflow Wrapper for MTBseq pipeline."
+# If blank, the running header is the title in upper case.
+#shorttitle: ""
+# Set names and affiliations.
+# It is nice to specify everyone's orcid, if possible.
+# There can be only one corresponding author, but declaring one is optional.
+author:
+    # Roles are optional.
+    # Select from the CRediT: Contributor Roles Taxonomy https://credit.niso.org/
+    #- conceptualization
+    #- data curation
+    #- formal Analysis
+    #- funding acquisition
+    #- investigation
+    #- methodology
+    #- project administration
+    #- resources
+    #- software
+    #- supervision
+    #- validation
+    #- visualization
+    #- writing
+    #- editing
+  - name: 'Abhinav Sharma*'
+    corresponding: true
+    orcid: 0000-0002-6402-6993
+    email: abhi18av@outlook.com
+    roles:
+      - conceptualization
+      - funding acquisition
+      - investigation
+      - methodology
+      - project administration
+      - software
+      - validation
+      - writing
+      - editing
+      - visualization
+    affiliations:
+      - id: sun
+        name: "SAMRC Centre for Tuberculosis Research; Division of Molecular Biology and Human Genetics, Faculty of Medicine and Health Sciences, Stellenbosch University, Cape Town, South Africa."
+  - name: 'Davi Josué Marcon*'
+    orcid: 0000-0003-1014-422X
+    roles:
+      - writing
+      - software
+      - investigation
+      - editing
+    affiliations:
+      - id: uepa
+        name: "Universidade do Estado do Pará, Instituto de Ciências Biológicas e da Saúde, Pós-Graduação em Biologia Parasitária na Amazônia, Belém, Pará, Brazil"
+  - name: Johannes Loubser
+    orcid: 0000-0002-2362-0187
+    email: jloubser@sun.ac.za
+    roles:
+      - editing
+      - validation
+    affiliations:
+      - ref: sun
+  - name: Karla Valéria Batista Lima
+    orcid: 0000-0001-5807-0392
+    email: "karlalima@iec.gov.br"
+    roles:
+      - validation
+      - editing
+      - resources
+    affiliations:
+      - ref: uepa
+      - id: iec
+        name: "Instituto Evandro Chagas, Seção de Bacteriologia e Micologia, Ananindeua, Pará, Brazil"
+  - name: 'Gian van der Spuy#'
+    orcid: 0000-0002-9067-5903
+    email: gvds@sun.ac.za
+    roles:
+      - visualization
+      - conceptualization
+      - supervision: equal
+    affiliations:
+      - ref: sun
+  - name: 'Emilyn Costa Conceição#'
+    orcid: 0000-0002-7445-6620
+    email: emilyncosta@gmail.com
+#    corresponding: true
+    roles:
+      - supervision: equal
+      - visualization
+      - conceptualization
+    affiliations:
+      - ref: sun
+
+author-note:
+  status-changes:
+  # Disclosures condensed to one paragraph, but you can start a field with two line breaks to break them up: \n\nNew Paragraph
+  disclosures:
+    # Acknowledge and cite data/materials to be shared.
+    data-sharing: ~
+    # Example: This article is based on data published in [Reference].
+    related-report: ~
+    conflict-of-interest: ~
+    # Example: This study was supported by Grant [Grant Number] from [Funding Source].
+    financial-support: ~
+    # Example: The authors are grateful to [Person] for [Reason].
+    gratitude: ~
+    # Example. Because the authors are equal contributors, order of authorship was determined by a fair coin toss.
+    authorship-agreements: "\\* The authors contributed equally.  # The authors contributed with equal supervision."
+abstract: "The MTBseq pipeline, published in 2018, was designed to address bioinformatics challenges in tuberculosis research using whole-genome sequencing data. It was the first publicly available pipeline on Github to perform full analysis of whole-genome sequencing (WGS) data for *Mycobacterium tuberculosis* encompassing quality control through mapping, variant calling for lineage classification, drug resistance prediction, and phylogenetic inference. However, the pipeline's architecture is not optimal for high-performance computing or cloud computing environments, which often require large datasets. To optimize the pipeline, a Nextflow wrapper MTBseq-nf, was created which offers shorter execution times through the parallel mode along with multiple other thematic improvements. The MTBseq-nf wrapper, as opposed to the linear batched analysis of samples in TBfull step of MTBseq pipeline, can execute multiple instances of the same step in parallel and therefore makes full use of the provided computational resources. For evaluation of scalability and reproducibility, we used 90 *M. tuberculosis* genomes (European Nucelotide Archive - ENA - accession PRJEB7727) for the benchmarking analysis on a dedicated computing server. In our experiments the execution time of MTBseq-nf parallel analysis mode is at least twice as fast as the standard MTBseq pipeline for more than 20 samples. Furthermore, the MTBseq-nf wrapper facilitates reproducibility using the nf-core, bioconda, and biocontainers projects for platform independence. The proposed MTBseq-nf wrapper pipeline is a user-friendly pipeline optimized for hardware efficiency, scalability for larger datasets, and improved reproducibility."
+# Put as many keywords at you like, separated by commmas (e.g., [reliability, validity, generalizability])
+keywords:
+  - Data analysis pipeline
+  - Genomic surveillance
+  - MTBseq
+  - Mycobacterium tuberculosis
+  - Mycobacterium tuberculosis complex
+  - Nexflow
+  - Pipeline
+  - Tuberculosis genomics
+  - Whole-genome sequencing
+  - Workflow
+# If true, tables and figures are mingled with the text instead of listed at the end of the document.
+floatsintext: true
+# Numbered lines (.pdf and .docx only)
+numbered-lines: true
+# File with references
+bibliography: references.bib
+
+bibliographystyle: _extensions/apaquarto/apa.csl
+
+csl: _extensions/apaquarto/apa.csl
+
+citeproc: true
+
+# Suppress title page
+suppress-title-page: false
+# Link citations to references
+link-citations: true
+# Masks references that appear in the masked-citations list
+mask: false
+#masked-citations:
+#  - schneider2015intelligence
+
+# If true, adds today's date below author affiliations. If text, can be any value.
+# This is not standard APA format, but it is convenient.
+# Works with docx, html, and typst.
+draft-date: true
+# Language options. See https://quarto.org/docs/authoring/language.html
+
+#suppress-corresponding-paragraph: true
+#suppress-corresponding-email: true
+suppress-corresponding-group: true
+suppress-corresponding-department: true
+suppress-corresponding-address: true
+suppress-corresponding-city: true
+suppress-corresponding-region: true
+suppress-corresponding-postal-code: true
+suppress-short-title: true
+#blank-lines-above-author-note: true
+
+lang: en
+language:
+  citation-last-author-separator: "and"
+  citation-masked-author: "Masked Citation"
+  citation-masked-date: "n.d."
+  citation-masked-title: "Masked Title"
+  email: "Email"
+  title-block-author-note: "Author Note"
+  title-block-correspondence-note: "Correspondence concerning this article should be addressed to"
+  title-block-role-introduction: "Author roles were classified using the Contributor Role Taxonomy (CRediT; https://credit.niso.org/) as follows:"
+  references-meta-analysis: "References marked with an asterisk indicate studies included in the meta-analysis."
+format:
+  apaquarto-docx: default
+  apaquarto-html: default
+  apaquarto-pdf:
+    # Can be jou (journal), man (manuscript), stu (student), or doc (document)
+    documentmode: man
+    font: 12pt
+    donotrepeattitle: true
+    a4paper: true
+    keep-tex: false
+#    draftall: false
+  apaquarto-typst:
+    keep-typ: true
+
+---
+
+<!-- NOTE: This is the quarto template I have used for the manuscript -->
+<!-- https://wjschne.github.io/apaquarto/options.html#options-for-.docx-and-typst -->
+
+
+
+# INTRODUCTION
+
+Next-generation sequencing (NGS) has revolutionized tuberculosis (TB) research, diagnosis, and surveillance, however analyzing this increasingly voluminous amount of complex bioinformatics data, presents numerous computational challenges [@berger2022-navigatingbottlenecks].
+The MTBseq pipeline [@kohl2018-mtbseq] was published in 2018 to address some of the challenges of data-analysis and improve the reproducibility of whole-genome sequencing (WGS) analysis of Mycobacterium *tuberculosis* complex (MTBC).
+MTBseq (MTBseq-standard) was one of the first comprehensive end-to-end pipelines and is widely used by researchers working with WGS data to generate and analyze the principal outputs namely (i) strain classification, (ii) phylogenetic tree, (iii) mapping and variant statistics, (iv) Single Nucleotide Polymorphism (SNP) distance matrix and (v) cluster groups.
+On the other hand, the computational infrastructure available to researchers ranges from the traditional in-house servers or high-performance computing (HPC) platforms. The available options have only been diversified in recent years with the development of (i) batch computing functionality by cloud computing vendors such as Oracle, Amazon Web Services (AWS), Google, Microsoft Azure, IBM and Alibaba etc (ii) open source job orchestrators like Kubernetes, Apache Meson and Hashicorp Nomad to analyze the exponentially increasing volume of data in an efficient manner [@stephens2015-genomicaldata] .
+This adoption trend of NGS technologies and use of modern job orchestrators is expected to continue for foreseeable future, especially in the context of precision public health and precision medicine.
+The MTBseq pipeline, in it current form performs sub-optimally for these modern computing environments, therefore we aimed to enhance the MTBseq pipeline for traditional as well as modern job orchestrators utilized in large-scale genomic analysis, while optimizing the costs and making the analysis time predictable.
+We developed MTBseq-nf, a wrapper built with the Nextflow workflow engine [@tommaso2017-nextflow] - to provide an alternative to current users of MTBseq-standard with various enhancements in its (i) user-friendliness, (ii) maintainability, (iii) reproducibility and (iv) scalability, for large-scale data analysis.
+
+# MATERIALS AND METHODS
+
+## The design of MTBseq (standard) pipeline
+
+The MTBseq pipeline by @kohl2018-mtbseq (MTBseq-standard) relies upon underlying tools such as `GATK3` [@mckenna2010-gatk], `PICARD` [@picard2019], `BWA` [@li2009-bwa] and `SAMTOOLS` [@li2009-samtools]; and glues these tools together using the `perl5` [@wall1994-perl] programming language as shown in Figure-1.
+
+FIGURE-1
+
+Its execution model is built upon core abstractions (called **steps**) such as reference mapping (`TBbwa`) and variant calling (`TBvariants`). These steps can be broadly classified into two groups based on (i) the quantity of samples analyzed per step, with sample-specific steps (`TBbwa`, `TBvariants`) and cohort-specific steps (`TBamend`, `TBgroups`) as well as (ii) composition, with primitive single-purpose steps (`TBbwa`, `TBgroups`), and composite multi-purpose step (`TBfull`), combining many of the primitive steps to facilitate routine usage of certain primitive steps, as summarized in Table-1.
+
+TABLE-1
+
+
+## Implementation of MTBseq-nf wrapper
+
+
+<!-- ## Design goals for MTBseq-nf-->
+
+We developed `MTBseq-nf` wrapper, on top of the open-source `MTBseq` pipeline, and implemented numerous enhancements across four broad themes (i) user-friendliness (ii) scalability (iii) reproducibility and (iv) maintainability, as summarized in Table-2.
+In the implementation of `MTBseq-nf` wrapper pipeline we built upon two core components. Firstly, the MTBseq-standard pipeline @kohl2018-mtbseq exposes a `--step` parameter allowing users to dictate which step of the pipeline they wish to initiate. Figure-1 highlights, how the MTBseq-standard pipeline facilitates the usage of sequential sample-specific steps for routine executions, through a composite `TBfull` step which automates the execution of sample-specific primitive steps from `TBbwa` step until the `TBstrains` step. Upon completion of these steps, the users are expected to provide a TSV file, containing a list of samples and corresponding library names, that should be included in further comparative analysis steps such as `TBjoin`, `TBamed` and `TBgroup` generating the principal outputs of the pipeline as described in Table-2. Secondly, the use of Nextflow workflow manager as per nf-core best-practices pipeline template.
+
+TABLE-2
+
+Nextflow is a workflow management system designed to address the challenges of high-throughput NGS data at scale in a reproducible manner [@tommaso2017-nextflow], allowing researchers to create complex workflows that integrate multiple bioinformatics tools into a single, cohesive workflow while maintaining portability across different computing infrastructure. The nf-core community further enhances the Nextflow ecosystem by bringing together Nextflow users through a Slack group, hackathons, seminars, training, and other community initiatives that foster collaboration and knowledge sharing [@ewels2020-nfcore ; @langer2024 ].
+Moreover, the nf-core pipeline template is constructed with rigorous standards to guarantee robustness, portability, and user-friendliness, due to its integration with other projects from the nf-core ecosystem, such as `nf-core/configs` and `nf-core/modules`.
+
+<!-- ## Parallel mode in MTBseq-nf-->
+
+Internally, the `MTBseq-standard` pipeline depends on the sequential analysis of input sequences thorough the `foreach` looping structures, with each sample advancing to the subsequent step only after all FASTQ samples have completed an individual step (Figure-2).
+On the other hand, the `MTBseq-nf` wrapper pipeline has two execution modes: (i) default and (ii) parallel mode, activated by the `--parallel` parameter. Both of these modes are functionally equivalent to the combination of `TBfull`, `TBgroups`, `TBamend` and `TBjoin` steps of the MTBseq pipeline,
+
+The principal insights we employed to implement the `--parallel` mode was to combine the advantages of both (i) MTBseq's modular step-wise architecture exposed through the `--step` parameter to facilitate the independent execution of individual steps in the MTBseq pipeline, as well as (ii) the inherent task parallelization provided by the Nextflow workflow engine.
+
+Consequently, when executed with the `--parallel` parameter, the MTBseq-nf wrapper pipeline employs the exact same primitive steps utilized by the `TBfull` step and optimizes the movement of intermediate files through the individual steps (Figure-2); resulting in a significant reduction in the overall execution time of the pipeline, especially when the number of samples in a cohort are large.
+We depend on the fact that when a sample-specific step is executed with a single sample, the `foreach` loop iterates only once, since only a single sample is accessible to that particular step.
+Moreover, the MTBseq-nf pipeline (in both modes) automates the generation of a TSV file when all samples undergo the initial phases of the `TBfull` step and initiates the comparative analysis stage, mirroring the behavior of the MTBseq-standard pipeline for subsequent steps, minimizing the manual intervention by users.
+
+FIGURE-2
+
+## Validation Infrastructure and Dataset
+
+
+<!-- ### Computational Resources for Validation -->
+
+For the computational studies, we selected a virtual server machine on the Oracle Cloud Infrastructure, featuring 32 CPUs (16 Oracle CPUs), 64 GB of RAM, and a boot disk capacity of 2 TB. The essential software requirements for the experiments were installations of (i) Java programming language [@arnold2005-java], (ii) Nextflow [@tommaso2017-nextflow], and (iii) Docker [@merkel2014-docker]. The MTBseq-standard pipeline v1.1.0 was installed using the bioconda recipe file provided as part of Supplemental data-2.
+The decision to utilize a server was crucial for our analysis of execution runtime, considering HPC queue systems impose an unpredictable delay before a submitted job starts execution.
+The Docker platform was chosen for its extensive utilization in cloud batch computing environments (AWS Batch, Azure Batch and Google Batch) as well as contemporary container orchestration solutions like Kubernetes and Hashicorp Nomad.
+The selection of Docker containers was influenced by the upstream biocontainer project assets [@daveiga2017-biocontainers], which are derived from bioconda recipes [@gruning2018-bioconda]. This approach enabled us to conduct the risk of non-reproducibility stemming from infrastructural discrepancies and enabled us to conduct an isolated analysis of the primary results of the pipeline.
+
+
+<!-- ### Pre-processing of Validation Dataset -->
+
+<!-- #### Original dataset -->
+
+We relied upon the original dataset utilized by the original study @kohl2018-mtbseq to evaluate the reproducibility and scalability of the MTBseq-nf wrapper in terms of (i) growth of execution time versus the cohort size as well as (ii) the validity of results produced.
+The dataset, as described by @schleusener2017-tbresistancepred - is publicly available under the European Nucleotide Archive (ENA) accession code **PRJEB7727**.
+Furthermore, @kohl2018-mtbseq - analyzed 91 samples for resistance and lineage profiling in a comparative setting as part of Supplementary material of the original publication. These IDs are shared in Supplemental data-1.1 .
+
+FIGURE-3
+
+<!-- #### Dataset cleanup -->
+
+The data submitted to ENA lists 133 paired-end FASTQ files obtained from *Mycobacterium tuberculosis* cultured samples (Supplemental data-1.2), and upon meticulous examination, we observed that (i) certain samples had several matching `experiment_accession` entries. The Supplementary-1.3 presents a frequency count of `secondary_sample_accession` in relation to `experiment_accession` ERS IDs) (ii) the samples utilized by @kohl2018-mtbseq had differences compared to those reported by the ENA project `PRJEB7727`, and (iii) one sample, `ERS457325` lacked any corresponding files in the indicated ENA project.
+Consequently, to minimize the effect of confounding factors, we opted to deduplicate the samples instead of merging those with identical accession numbers. This was done by utilizing the very first appearance of specific `secondary_sample_accession` IDs from the files acquired from the ENA project and by excluding the missing `ERS457325` (`4730-03`) from our analysis, thereby reducing the final dataset to 90 paired-end FASTQ files.
+Figure-3 demonstrates our data splitting strategy for the reproducibility as well as the scalability analysis of MTBseq-nf. The conclusive samplesheet is provided in Supplemental data-1.4.
+
+<!-- #### Design of validation datasets -->
+
+For the scalability analysis, we divided the dataset into six cohorts with an incremental number of samples namely 5, 10, 20, 40, 80 and finally 90 FASTQ paired-end files. Furthermore, the largest dataset, was used for the validation of principal outputs generated by MTBseq and MTBseq-nf (default and parallel) pipelines.
+
+## Experimental Setup for Evaluation of Scalability and Reproducibility
+
+To minimize the possibility of regression in MTBseq-nf results (default and parallel modes) in comparison to the MTBseq-standard pipeline. We conducted a triplicated experiments (i) intra-modal analysis to assess reproducibility *within* each mode and (ii) inter-modal analysis to assess reproducibility *across* distinct modes. Consequently, due to this triplicated experimental design, we evaluated the results of nine distinct runs of the pipelines which are highlighted in Table-3.
+
+<!-- TABLE-3 -->
+
+The parameters utilized for these experiments and the associated results are published as part of the Zenodo repository https://doi.org/10.5281/zenodo.14678756, while the names of individual runs and significant parameters are reported in Table-3.
+Moreover, each experiment was conducted independently without employing Nextflow's resume feature to guarantee fresh execution of each of the individual steps.
+
+
+To evaluate the scalability of the pipeline, we analyzed the execution time growth for the six specified cohorts using the default mode and parallel mode of MTBseq-nf on these datasets.
+The executions of MTBSeq-nf in both default and parallel modes were monitored and visualized via the Seqera Platform [@seqeracloud], which serves as a centralized repository for tracking execution metrics and maintaining pipeline configurations.
+
+
+To evaluate the reproducibility of the different modes of MTBseq-nf, we compared the principal results of inter- and intra-modal triplicated experiments by conducting (i) 3-way diffs using Araxis Merge [@araxismerge], (ii) range analysis of numerical data using R language [@r-lang], along with (iii) phylogenetic tree using IQTREE program (v2.3.4) [@jana2016-iqtree] as summarized in Table-4.
+
+<!-- TABLE-4 -->
+
+We utilized a 3-way visual diff in order to assess the disparities in the principal results, which are qualitative in nature.
+For the mapping and variant statistics produced by `TBstats` (including `Mapped Reads` and `SNPs`), we utilized range statistics (min-max analysis) in R to estimate the relative changes across various intra- and inter-modal studies.
+The scripts utilized for the analysis and visualizations are available in the following repository: https://github.com/abhi18av-phd-projects/mtbseq-nf-publication-analysis.
+
+# RESULTS
+
+### Thematic improvements in MTBseq-nf
+
+The MTBseq-nf wrapper pipeline offers substantial enhancements over the MTBseq-standard pipeline, including an innovative parallel mode that significantly reduces overall execution time for large cohorts. The implemented features span four key themes: (1) user-friendliness, (2) scalability, (3) reproducibility, and (4) maintainability, as highlighted in Table-5 and detailed in Supplemental data-3.
+
+<!-- TABLE-5 -->
+
+MTBseq-nf leverages the standardized template from the nf-core community, providing numerous advantages including: (i) configuration files (dotfiles) that address code quality, linting, and testing requirements; (ii) integration with the nf-core/configs project for portability across institutional infrastructures; (iii) access to well-tested modules from the nf-core/modules project; and (iv) a graphical user interface through the nf-schema project for users less familiar with command-line operations.
+
+<!-- FIXME add a screenshot of MTBseq-nf using `nf-schema` -->
+
+### Reproducibility analysis of intra-modal comparison
+
+<!-- FIGURE-4 -->
+
+For the intra-modal comparison of the three pipeline-mode combinations, we conducted triplicated experiments with identical infrastructure, dataset, and parameters as described in Table-3.
+
+<!-- TABLE-6 -->
+
+As summarized in Table-6, the classification and SNP distance matrix results demonstrated consistency across experiments, with differences limited to execution dates, which was expected as successive runs could only begin after previous runs completed. Similarly, the phylogenetic trees remained stable across different experiments. The cluster groups, which are assigned labels based on the SNP matrix, showed some variation in exact labeling across different runs of the TBgroups step, attributable to the inherent nature of the agglomerative algorithm used, though the actual grouping of samples remained accurate.
+
+The statistics report showed some differences in triplicated runs of MTBseq and MTBseq-nf default mode, as shown in Figure-4b and Figure-4c. Notably, for MTBseq-nf parallel mode, none of the numerical fields showed differences across triplicated runs, indicating complete reproducibility of results in this mode.
+
+
+Furthermore, results obtained from triplicated runs of MTBseq-nf (default) and MTBseq-standard, visualized in Figure-4b and Figure-4d, demonstrated the functional equivalence of these modes.
+
+### Reproducibility analysis of inter-modal comparison
+
+
+<!-- TODO Consider changing the table to show something more meaningful like fractional changes.-->
+
+<!-- {{< include ./assets-raw/tables-quarto/_table-5.qmd >}} -->
+
+
+
+#### MTBseq-standard vs MTBseq-nf (default)
+
+The samples with differences are listed in Table-8. Figure-4d highlights the numerical variation in SNP counts between MTBseq-standard and MTBseq-nf (default) runs across the fields of `Uncovered`, `TotalBasesUnambguous`, and `TotalBases`, with negligible differences in the `GCContentUnambiguous` field. Additionally, the UpSet plot in Figure-5a illustrates the variation in specific columns and corresponding sample numbers.
+
+<!-- TABLE-8 -->
+
+<!-- FIGURE-5 -->
+
+#### MTBseq-nf (parallel) vs MTBseq-nf (default)
+
+When comparing MTBseq-nf (parallel) with MTBseq-nf (default), we observed variations similar to the intra-modal variation of MTBseq-standard triplicated runs, as shown in Table-9, Figure-5b, and Figure-5c.
+
+#### MTBseq-nf (parallel) vs MTBseq-standard
+
+MTBseq-nf (parallel) vs MTBseq-standard: For a comprehensive analysis, we compared MTBseq-nf (parallel) with MTBseq-standard, despite the latter being functionally equivalent to MTBseq-nf (default). This comparison is presented in Table-10, Figure-5e, and Figure-5d.
+
+
+### Scalability analysis of MTBseq-nf (default) and MTBseq-nf (parallel)
+
+To evaluate execution time growth, we included only one specific run for each mode of MTBseq-nf and excluded MTBseq-standard from the analysis due to the manual intervention step required after TBfull before proceeding to TBstats, TBgroups, and TBamend steps. Since MTBseq-standard and MTBseq-nf (default) are functionally equivalent, comparing total execution time between MTBseq-nf (default) and MTBseq-nf (parallel) was sufficient to analyze the growth curves.
+
+<!-- TABLE-7 -->
+
+As demonstrated in Figure-4a and Table-7, when processing more than 10 FASTQ paired-end files, the execution time of MTBseq-nf (default) is at least double that of MTBseq-nf (parallel), highlighting the significant performance benefits of the parallel mode optimizations. This difference becomes increasingly pronounced as the sample size grows, making MTBseq-nf (parallel) particularly valuable for large-scale genomic analyses.
+
+# DISCUSSION
+
+The MTBseq-nf pipeline represents a significant optimization effort to modernize the widely adopted MTBseq-standard pipeline for analyzing WGS data from the *Mycobacterium tuberculosis* culture. In doing so, it addresses numerous pain points experienced by users of the original MTBseq pipeline, especially in high-throughput and diverse computing environments.
+One of the major advancements introduced by MTBseq-nf is its optional `--parallel` execution mode. By decoupling sequential dependencies and capitalizing on the Nextflows inherent parallelization features, MTBseq-nf significantly reduces the overall runtime of the pipeline. Our empirical analysis indicated that the execution time scales much more gracefully in the parallel mode, particularly as the number of samples increases — a critical feature for genomic surveillance programs processing hundreds or thousands of isolates.
+
+The task-level isolation introduced by `parallel` mode ensures that each primitive step has sufficient memory (and CPU) during its execution and as soon as the step completes, the relevant docker container exits and the docker container engine ensures that the computational resources of the host system are released and made available for other queued tasks [@tommaso2015-docker].
+Whereas in the `TBfull` step within MTBseq and MTBseq-nf (default), the consumed memory is not immediately released when the previous process completes as the computations are done sequentially within the same container, therefore the subsequent processes have slightly reduced access to memory, which has an impact upon the memory-intensive computations required by `GATK`.
+
+This improvement with MTBseq-nf `parallel` is especially beneficial for the integration of bioinformatic analysis in routine diagnostics and surveillance work especially in resource-constrained environments such as Low- and Middle-income countries (LMICs), where TB is endemic and timely analysis is vital, and where infrastructure may not be suited to long, sequential compute jobs. Furthermore, the ability to execute the MTBseq-nf pipeline across laptops, servers, HPC clusters, and cloud batch systems allows for unprecedented flexibility and broader adoption.
+
+Reproducibility is a cornerstone of bioinformatics pipelines, particularly when used in clinical and public health contexts. MTBseq-nf leverages Nextflow’s declarative parameter feature, integration with container systems [@kadri2022-containers] such as Docker, and in-built caching mechanisms to rapidly deliver reproducible results across varied environments. The triplicated intra-modal experiments confirmed the consistency of principal outputs across different runs of MTBseq-nf, particularly in the parallel mode, which showed no measurable variation in statistics or results.
+
+Moreover, discrepancies in output observed between sequential and parallel executions, such as minor differences in `TBstats` reports, are likely attributable to the memory-intensive behavior of tools like GATK when executed sequentially on all samples in shared containers. In contrast, the task-level isolation in the parallel mode ensures more consistent memory allocation, leading to increased stability of result across executions.
+
+In architecting MTBseq-nf on top of MTBseq-standard, we have prioritized a straight-forward user experience. By adopting the nf-core best practices, users benefit from structured configuration files, standardized output, and simplified parameter management. Features like an explicit sample sheet, an optional Graphic User Interface (GUI) through the `nf-schema` project, and remote execution monitoring and infrastructure management (via the Seqera platform) [@seqeracloud] further enhance usability, especially for users less familiar with the command line.
+Another valuable addition is the inclusion of modules like `FastQC` and `MultiQC` [@ewels2016-multiqc], which offer quality control summaries that are now seamlessly integrated into the pipeline without manual intervention. In contrast, integrating such tools into MTBseq-standard would require creation, customization, and testing of Perl-wrapped modules.
+
+The adoption of the nf-core pipeline template ensures the future viability of MTBseq-nf by allowing rapid integration of updates and modules. Unlike the traditional software architecture of the MTBseq-standard pipeline, which makes maintenance and extension daunting, especially for newcomers, to the project; the modular design of MTBseq-nf, owing to the nf-core best-practices template, aligns with modern software engineering practices, including continuous integration and delivery (CI/CD), unit testing (e.g., using nf-test), and community contributions via Github.
+This design ensures that MTBseq-nf can evolve in response to user needs, bug reports, and new tool integrations — such as IQTREE, which, although not currently included, can be added as an integrated module in future iterations depending on research requirements.
+
+In terms of limitations, despite its many strengths, MTBseq-nf inherits the core computational logic of MTBseq-standard, limiting opportunities for deeper architectural optimization. The reliance on MTBseq’s Perl-based modules, while preserving backward compatibility, poses a ceiling on how extensively the workflow can be modernized.
+Future work could involve translating these steps into native Nextflow processes or subworkflows, which would improve maintainability and support pluggable alternative tools for the individual steps of MTBseq-standard for alignment and variant calling tools.
+
+Additionally, minor variations in SNP clustering labels across runs, an artifact of the agglomerative clustering algorithm, do not impact downstream phylogenetic analyses but underscores the importance of clear documentation and careful interpretation of clustering outputs.
+The efficiency gains offered by MTBseq-nf reduce execution time, cost of analysis and contribute to sustainability goals by lowering computational carbon footprints, an increasingly relevant consideration in bioinformatics research [@loic2024-greener;@grealey2022-bioinfocarbon]. Quantifying and comparing emissions across pipelines could be a compelling area for future investigation.
+Furthermore, the versatility of MTBseq-nf enables its deployment in both high-resource and constrained settings, supporting TB control efforts globally. By simplifying complex analyses and promoting reproducibility, the pipeline aligns with the broader goals of precision public health and genomic epidemiology.
+
+# CONCLUSION
+
+In light of the (i) rapidly increasing WGS data for *M. tuberculosis* (ii) along with its applicability in genomic surveillance and precision medicine; the MTBseq-nf offers a more scalable, portable and user-friendly alternative to the MTBseq-pipeline.
+The MTBseq-nf wrapper optimises the MTBseq-standard pipeline particularly towards an effecient usage of computational resources for genomic "Big Data" analysis for. In addition, it also improves the user-friendliness, reproducibility, scalability and customisablity as compared to the MTBseq-standard pipeline.
+These enhacements in MTBseq-nf adds to the versatality of that the original MTBseq-standard as a suitable alternative, not only for routine usage in resource-rich environments, but particularly  in resource-constraint LMIC settings where fine-grained control over resource usage is necessary.
+
+# CONFLICT OF INTEREST STATEMENT
+
+The authors have no competing interests to disclose, with the exception of Abhinav Sharma, who was employed by Seqera Labs until 2022 and has also been involved in the development of Nextflow, Seqera Platform and the MAGMA pipeline.
+
+
+# ACKNOWLEDGEMENTS
+
+We extend our gratitude towards the authors of MTBseq-standard pipeline, Kohl et al. (2018), for the initiative of publishing MTBSeq pipeline with open source on Github.
+
+
+# DATA AVAILABILITY STATEMENT
+
+The dataset published on Zenodo https://doi.org/10.5281/zenodo.14678756 contains results and metadata for the nine runs of MTBseq-standard, MTBseq-nf (default) and MTBseq-nf (parallel) including (i) MultiQC reports (ii) runtime metrics (iii) pipeline parameters (iv) results of all experiments.
+
+
+# CODE AVAILABILITY STATEMENT
+
+MTBseq-nf pipeline https://zenodo.org/records/15234640
+
+MTBseq-nf analysis scripts https://github.com/abhi18av-phd-projects/pub-mtbseq-nf
+
+# FUNDING STATEMENT
+
+This study was also funded by the Brazilian National Council for Scientific and Technological Development (Conselho Nacional de Desenvolvimento Científico e Tecnológico -CNPq) grant process number 445784/2023-7 under the REVIGET N/NE project. This work was supported in part by Oracle Cloud credits (Award Number 3083687) and related resources provided by Oracle for Research. The financial assistance of the National Research Foundation (NRF) towards this research is hereby acknowledged by AS. Opinions expressed and conclusions arrived at, are those of the author and are not necessarily to be attributed to the NRF.
+
+# GENERATIVE AI STATEMENT
+
+We utilized the ChatGPT and QuillBot tool for grammar checks, paraphrasing and summarization.
+
+# REFERENCES
+
+
+<!-- References will auto-populate in the refs div below -->
+
+::: {#refs}
+:::
