@@ -3,7 +3,7 @@ name = "mtbseq-nf"
 version = "0.0.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">="
+requires-python = ">=3.10"
 dependencies = [
     "dso-core>=0.9",
     "ipykernel>=6.29.5",
