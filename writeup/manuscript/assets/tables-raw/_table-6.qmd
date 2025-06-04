@@ -1,0 +1,25 @@
+---
+title: ""
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Roboto"
+        keep-typ: true
+
+tbl-cap-location: top
+
+execute:
+  echo: false
+  warning: false
+
+---
+
+Table 6. A total of 3 samples demonstrated variations across metrics in the statistics report.
+
+| SampleID | Uncovered | TotalBasesUnambiguous | TotalBases |
+|----------|-----------|-----------------------|------------|
+| 6639-04  |           | X                     |            |
+| 3496-04  | X         | X                     | X          |
+| 5870-03  | X         | X                     | X          |

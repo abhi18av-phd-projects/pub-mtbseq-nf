@@ -193,3 +193,6 @@ cython_debug/
 analysis/pipelines/MTBseq-nf
 writeup/manuscript/previous
 writeup/manuscript/_output
+
+*.docx
+*.pdf

@@ -1,0 +1,37 @@
+---
+title: ""
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Roboto"
+        keep-typ: true
+
+tbl-cap-location: top
+
+execute:
+  echo: false
+  warning: false
+
+---
+
+
+
+```{=typst}
+#set page("a4", flipped:true)
+
+```
+
+
+
+Table 5. Summary of intra-modal analysis of principal outputs of triplicated runs. Notably, MTBseq-nf (parallel) mode does not have any differences in the principal results.
+
+| Principal output    | `MTBseq` (standard) | `MTBseq-nf` (default mode) | `MTBseq-nf` (parallel mode) |
+|---------------------|----------------------------------------------------------|-----------------------------------------------------------------|------------------------------------------------------------------|
+| Classification      | No differences                                           | No differences                                                  | No differences                                                   |
+| SNP distance matrix | No differences                                           | No differences                                                  | No differences                                                   |
+| Phylogenetic tree   | No differences                                           | No differences                                                  | No differences                                                   |
+| Cluster groups      | Consistent agglomeration                                 | Consistent agglomeration                                        | Consistent agglomeration                                         |
+| Statistics          | Minor differences                                        | Minor differences                                               | No differences                                                   |
+: Table-5: Summary of intra-modal analysis of principal outputs of triplicated runs. Notably, MTBseq-nf (parallel) mode does not have any differences in the principal results.
