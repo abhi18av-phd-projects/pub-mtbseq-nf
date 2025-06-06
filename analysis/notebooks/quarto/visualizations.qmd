@@ -1,0 +1,469 @@
+---
+title: "MTBseq-nf"
+author: "Gian van der Spuy"
+date: last-modified
+date-format: D MMMM YYYY
+format:
+  html:
+    page-layout: full
+    default-image-extension: svg
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+editor: source
+---
+
+```{shell}
+# renv::restore()
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+#| layout-align: left
+
+# Load necessary libraries
+library(jsonlite)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+library(foreach)
+library(lubridate)
+library(svglite)
+library(kableExtra)
+library(UpSetR)
+```
+
+```{r}
+
+#| fig-cap: "Figure-3: The growth of total runtime of the MTBseq-nf parallel mode and default mode versus the sample size."
+
+# Read the data into a data frame
+data <- read.csv("analysis/data/02_intermediate/execution-times.csv", stringsAsFactors = FALSE)
+
+
+# Convert total_runtime to minutes
+convert_to_minutes <- function(runtime) {
+  # Check if the runtime contains hours
+  if (grepl("h", runtime)) {
+    # Convert to period and then to minutes
+    period <- hms(runtime)
+    as.numeric(period_to_seconds(period) / 60)
+  } else {
+    # Convert to period and then to minutes
+    period <- ms(runtime)
+    as.numeric(period_to_seconds(period) / 60)
+  }
+}
+
+# Apply the conversion function to the total_runtime column
+data$total_runtime_minutes <- sapply(data$total_runtime, convert_to_minutes)
+
+# Print the updated data frame
+#print(data)
+
+# Create the ggplot figure
+ggplot(data, aes(x = number_of_samples, y = total_runtime_minutes, color = execution_mode)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "MTBseq-nf: Default vs Parallel mode",
+       x = "Number of Samples",
+       y = "Total Runtime (minutes)",
+       color = "Execution Mode") +
+  theme_bw()
+
+
+```
+
+## Read in the dataset and separate categorical/numerical columns
+
+```{r}
+#NOTE: Setup the dataframe for further analysis
+
+json <- fromJSON(txt = "analysis/data/02_intermediate/Statistics.json" , flatten=TRUE)
+
+experiments <- names(json$Experiments)
+
+for (experiment in experiments) {
+  lists <- lapply(json$Experiments[[experiment]]$statistics, as.list)
+  experiment <- gsub('-','_',experiment)
+  assign(experiment, as.data.frame(do.call(rbind, lists)))
+}
+
+experiments <- sapply(experiments, function(experiment) gsub('-','_',experiment), USE.NAMES = FALSE)
+
+rm(json,lists)
+
+for (experiment in experiments) {
+  assign(experiment, data.frame(apply(do.call(cbind, eval(as.symbol(experiment))),2, function(x) unlist(x,use.names = F))))
+}
+
+
+df <- bind_rows(mget(experiments), .id='id')
+
+sampleids <- df |>
+  filter(id == experiment) |>
+  select(SampleID)
+
+rm(experiment,experiments)
+
+rm(list = ls(pattern = '^mtbseq.*'))
+numericVars <- as.vector(names(df)[!names(df) %in% c('id','FullID','SampleID','Date','LibraryID', 'GCContentUnambiguous')])
+df <- cbind(df[c('id','SampleID')],apply(df[numericVars],2,as.numeric))
+```
+
+## Intra-modal comparison of Standard `MTBseq` runs
+
+```{r fig.width=10,fig.height=5}
+#| fig-cap: "Figure-X: Intra-modal variations in MTBseq. The differences across triplicated runs of MTBseq were observed only for one sample `4514-03` with the ENA ID `ERS458588`."
+#| fig-cap-location: top
+#| echo: false
+
+ranges_standard <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_standard_run1','pub_90samples_mtbseq_standard_run2','pub_90samples_mtbseq_standard_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_standard) <- numericVars
+
+ranges_standard.summary <- apply(ranges_standard,2, function(x) sum(x!=0))
+intraStandardVariants <- ranges_standard.summary[which(ranges_standard.summary > 0)]
+
+graphs_standard <- foreach (i=1:length(intraStandardVariants)) %do% {
+  variant <-
+names(intraStandardVariants)[i]
+  ranges_standard |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_standard),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    theme(axis.title.x = element_blank()) +
+    ylab("Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_standard, ncol=3))
+```
+
+## (Intra-mode) Compare metrics of Normal `MTBseq-nf (default)` runs
+
+```{r fig.width=10,fig.height=5}
+#| fig-cap: "Figure-X: Intra-modal variations in MTBseq-nf (default). The differences across triplicated runs of MTBseq-nf (default) were observed only for two sample `3158-04` (`ERS458130`) and `5870-03` (`ERS457344`)."
+#| fig-cap-location: top
+#| echo: false
+
+ranges_normal <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_nf_run1','pub_90samples_mtbseq_nf_run2','pub_90samples_mtbseq_nf_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_normal) <- numericVars
+
+ranges_normal.summary <- apply(ranges_normal,2, function(x) sum(x!=0))
+ranges_normal
+
+intraNormalVariants <- ranges_normal.summary[which(ranges_normal.summary > 0)]
+intraNormalVariants
+
+graphs_normal <- foreach (i=1:length(intraNormalVariants)) %do% {
+  variant <- names(intraNormalVariants)[i]
+  ranges_normal |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_normal),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    theme(axis.title.x = element_blank()) +
+    ylab("Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_normal, ncol=3))
+```
+
+## (Intra-mode) Compare metrics of Parallel `MTBseq-nf` runs
+
+```{r fig.width=10,fig.height=10}
+#| echo: false
+ranges_parallel <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_nf_parallel_run1','pub_90samples_mtbseq_nf_parallel_run2','pub_90samples_mtbseq_nf_parallel_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_parallel) <- numericVars
+
+ranges_parallel.summary <- apply(ranges_parallel,2, function(x) sum(x!=0))
+intraParallelVariants <- ranges_parallel.summary[which(ranges_parallel.summary > 0)]
+
+# graphs_parallel <- foreach (i=1:length(intraParallelVariants)) %do% {
+#   variant <- names(intraParallelVariants)[i]
+#   ranges_parallel |>
+#     select(all_of(variant)) |>
+#     arrange(.data[[variant]]) |>
+#     ggplot(aes(x=1:nrow(ranges_parallel),y=.data[[variant]])) +
+#     geom_point() +
+#     geom_line() +
+#     theme_grey() +
+#     ggtitle(variant) +
+#     theme(axis.title.x = element_blank()) +
+#     ylab("Difference")
+# }
+#
+# do.call("grid.arrange", c(graphs_parallel, ncol=3))
+```
+
+No variation
+
+## (Inter-mode) Compare metrics of Normal `MTBseq-nf` (default) vs Standard `MTBseq`
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report."
+#| fig-cap-location: top
+
+
+ranges_standard_normal <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_standard_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_standard_normal) <- numericVars
+
+ranges_standard_normal.summary <- apply(ranges_standard_normal,2, function(x) sum(x!=0))
+interStandardNormalVariants <- ranges_standard_normal.summary[which(ranges_standard_normal.summary > 0)]
+
+graphs_standard_normal <- foreach (i=1:length(interStandardNormalVariants)) %do% {
+  variant <- names(interStandardNormalVariants)[i]
+  ranges_standard_normal |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_standard_normal),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    theme(axis.title.x = element_blank()) +
+    ylab("Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_standard_normal, ncol=3))
+
+```
+
+## (Inter-mode) Normal `mtbseq-nf` vs Standard `mtbseq` Variant Samples
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants."
+#| tbl-cap-location: top
+
+parameters.of.interest <- ranges_standard_normal.summary[ranges_standard_normal.summary > 0 ]
+
+
+table_standard_normal <-  sampleids |>
+      bind_cols(ranges_standard_normal) |>
+      select(c('SampleID', names(parameters.of.interest))) %>%
+      filter(rowSums(.[,-1]) > 0) |>
+      mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X','')))
+
+
+write_tsv(table_standard_normal, "inter-modal-mtbseq-standard-mtbseq-nf-normal.tsv")
+
+#kable(table_standard_normal, format = "markdown")
+
+table_standard_normal|>
+  kable(align = "c") |>
+  kable_classic()
+
+```
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (Normal vs Standard)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants."
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_standard_normal.summary[ranges_standard_normal.summary > 0 ]
+
+ranges_standard_normal |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```
+
+# (Inter-mode) Compare metrics of Normal `mtbseq-nf (default)` vs Parallel `mtbseq-nf`
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default)"
+#| fig-cap-location: top
+
+
+ranges_normal_parallel <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_nf_parallel_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_normal_parallel) <- numericVars
+
+ranges_normal_parallel.summary <- apply(ranges_normal_parallel,2, function(x) sum(x!=0))
+interNormalParallelVariants <- ranges_normal_parallel.summary[which(ranges_normal_parallel.summary > 0)]
+
+graphs_NormalParallel <- foreach (i=1:length(interNormalParallelVariants)) %do% {
+  variant <- names(interNormalParallelVariants)[i]
+  ranges_normal_parallel |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_normal_parallel),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    theme(axis.title.x = element_blank()) +
+    ylab("Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_NormalParallel, ncol=3))
+```
+
+## (Inter-mode) Normal vs Parallel Variant Samples (Normal vs Parallel)
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default), a total of 70 samples showed variations across 9 metrics in the statistics report, parameters with fewer than 10 variants."
+#| tbl-cap-location: top
+
+
+parameters.of.interest <- ranges_normal_parallel.summary[ranges_normal_parallel.summary > 0 ]
+
+sampleids |>
+  bind_cols(ranges_normal_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X',''))) |>
+  kable(align = "c") |>
+  kable_classic()
+
+
+
+```
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (MTBseq-nf Normal vs Parallel)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default), upset plot."
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_normal_parallel.summary[ranges_normal_parallel.summary > 0 ]
+
+ranges_normal_parallel |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```
+
+# (Inter-mode) Compare metrics of Standard vs Parallel
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq."
+#| fig-cap-location: top
+
+ranges_parallel_standard <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_parallel_run',j),paste0('pub_90samples_mtbseq_standard_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_parallel_standard) <- numericVars
+
+ranges_parallel_standard.summary <- apply(ranges_parallel_standard,2, function(x) sum(x!=0))
+interParallelStandard <- ranges_parallel_standard.summary[which(ranges_parallel_standard.summary > 0)]
+
+graphs_ParallelStandard <- foreach (i=1:length(interParallelStandard)) %do% {
+  variant <- names(interParallelStandard)[i]
+  ranges_parallel_standard |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_parallel_standard),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    theme(axis.title.x = element_blank()) +
+    ylab("Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_ParallelStandard, ncol=3))
+```
+
+## (Inter-mode) Standard vs Parallel Variant Samples
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: MTBseq-nf (parallel) vs MTBseq, a total of "
+#| tbl-cap-location: top
+
+parameters.of.interest <- ranges_parallel_standard.summary[ranges_parallel_standard.summary > 0 ]
+
+sampleids |>
+  bind_cols(ranges_parallel_standard) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X',''))) |>
+  kable(align = "c") |>
+  kable_classic()
+
+```
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (Standard vs Parallel)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq, a total of 70 samples"
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_parallel_standard.summary[ranges_parallel_standard.summary > 0 ]
+
+ranges_parallel_standard |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```
