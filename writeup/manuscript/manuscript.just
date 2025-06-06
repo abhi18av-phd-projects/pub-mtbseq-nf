@@ -39,8 +39,11 @@ manuscript-version version:
 
 # === MANUSCRIPT MERGE ===
 
-manuscript-version version:
+assets-merge-pdfs version:
     qpdf --empty --pages *pdf  -- final_document.pdf
+
+assets-svg-to-pdf:
+    inkscape --export-filename=out.pdf combined.svg
 
 # === Submissions ===
 
