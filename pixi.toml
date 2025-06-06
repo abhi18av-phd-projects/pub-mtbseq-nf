@@ -1,0 +1,30 @@
+[workspace]
+channels = ["conda-forge", "bioconda", "r", "h2oai", "anaconda"]
+name = "pub-MTBseq-nf"
+platforms = ["linux-64", "osx-64"]
+
+[dependencies]
+python = "3.11.*"
+great_tables = ">=0.14.0,<0.18"
+pandas = ">=2.2.3,<3"
+seaborn = ">=0.13.2,<0.14"
+matplotlib = ">=3.10.3,<4"
+jupyterlab = ">=4.4.2,<5"
+r-base = ">=4.3,<4.4"
+r-renv = "=1.1"
+r-devtools = "*"
+r-ggplot2 = "*"
+r-yaml = "*"
+r-tidyverse = "*"
+r-jsonlite= "*"
+r-gridextra= "*"
+r-foreach= "*"
+#----- PROBLEMATIC----
+#r-upsetr ="*"
+#r-plyr ="*"
+#r-dplyr= "*"
+#r-kableextra = "*"
+#r-svglite= "*"
+
+[tasks]
+start = "python scripts/python/hello.py"
