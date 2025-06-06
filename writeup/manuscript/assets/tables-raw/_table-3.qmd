@@ -5,7 +5,7 @@ author: ""
 format:
     docx: default
     typst:
-        mainfont: "Roboto"
+        mainfont: "Ubuntu"
         keep-typ: true
 
 tbl-cap-location: top
@@ -16,16 +16,18 @@ execute:
 
 ---
 
-Table 3. Summary of different executions of MTBseq and MTBseq-nf in the triplicated set of experiments.
+### Table 3. Growth of total execution time (runtime) of different modes of MTBseq-nf for 5 datasets with increasing cohort size.
 
-| Run ID                  | Run name                              | Description        | Notable non-default parameter |
-|-------------------------|---------------------------------------|--------------------|-------------------------------|
-| mtbseq-standard-run1    | pub-90samples-mtbseq-standard-run1    | MTBseq pipeline    |                               |
-| mtbseq-standard-run2    | pub-90samples-mtbseq-standard-run2    | MTBseq pipeline    |                               |
-| mtbseq-standard-run3    | pub-90samples-mtbseq-standard-run3    | MTBseq pipeline    |                               |
-| mtbseq-nf-run1          | pub-90samples-mtbseq-nf-run1          | MTBseq-nf pipeline |                               |
-| mtbseq-nf-run2          | pub-90samples-mtbseq-nf-run2          | MTBseq-nf pipeline |                               |
-| mtbseq-nf-run3          | pub-90samples-mtbseq-nf-run3          | MTBseq-nf pipeline |                               |
-| mtbseq-nf-parallel-run1 | pub-90samples-mtbseq-nf-parallel-run1 | MTBseq-nf pipeline | --parallel                    |
-| mtbseq-nf-parallel-run2 | pub-90samples-mtbseq-nf-parallel-run2 | MTBseq-nf pipeline | --parallel                    |
-| mtbseq-nf-parallel-run3 | pub-90samples-mtbseq-nf-parallel-run3 | MTBseq-nf pipeline | --parallel                    |
+
+```{=typst}
+\
+\
+```
+
+| *Number of samples* | *MTBseq-nf (default)* | *MTBseq-nf (parallel)* |
+|---------------------|-----------------------|------------------------|
+| 5                   | 0h53m0s               | 0h34m0s                |
+| 10                  | 2h2m0s                | 1h0m45s                |
+| 20                  | 4h32m0s               | 1h53m0s                |
+| 40                  | 8h57m0s               | 4h43m0s                |
+| 80                  | 18h32m0s              | 7h14m0s                |

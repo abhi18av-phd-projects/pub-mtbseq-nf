@@ -196,3 +196,6 @@ writeup/manuscript/_output
 
 *.docx
 *.pdf
+
+/.luarc.json
+.Rproj.user

@@ -16,28 +16,29 @@ execute:
 
 ---
 
-Table 2. Summary of thematic enhancements in MTBseq-nf, Nextflow wrapper for the original MTBseq pipeline.
 
-| Theme             | Feature                       |
-|-------------------|-------------------------------|
-| User-friendliness | Ease of download              |
-| User-friendliness | Explicit samplesheet          |
-| User-friendliness | Graphical user interface      |
-| User-friendliness | MultiQC Summary report        |
-| User-friendliness | CSV and TSV format cleanup    |
-| User-friendliness | Remote monitoring             |
-| User-friendliness | Manual steps                  |
-| User-friendliness | Flexible output location      |
-| Maintainability   | Extensibility                 |
-| Maintainability   | Module testing                |
-| Maintainability   | Test dataset                  |
-| Scalability       | Parallel execution            |
-| Scalability       | HPC compatibility             |
-| Scalability       | Resource allocation           |
-| Scalability       | Dynamic retries               |
-| Scalability       | Execution cache               |
-| Scalability       | Reduced data footprint        |
-| Scalability       | Reduced cloud computing costs |
-| Reproducibility   | Declarative parameters file   |
-| Reproducibility   | Portability                   |
-| Reproducibility   | Save intermediate files       |
+
+```{=typst}
+#set page("a4", flipped:true)
+
+```
+
+
+### Table 2. Summary of intra-modal analysis of principal outputs of triplicated runs. Notably, MTBseq-nf (parallel) mode does not have any differences in the principal results.
+
+
+```{=typst}
+\
+\
+```
+
+
+: {tbl-colwidths="[30,40,40,50]"}
+
+| **Principal output** | **MTBseq (standard)**  | **MTBseq-nf (default mode)** | **MTBseq-nf (parallel mode)** |
+|----------------------|--------------------------|--------------------------------|---------------------------------|
+| Classification       | No differences           | No differences                 | No differences                  |
+| SNP distance matrix  | No differences           | No differences                 | No differences                  |
+| Phylogenetic tree    | No differences           | No differences                 | No differences                  |
+| Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
+| Statistics           | Minor differences        | Minor differences              | No differences                  |
