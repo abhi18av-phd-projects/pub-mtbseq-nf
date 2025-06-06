@@ -37,6 +37,11 @@ manuscript-version version:
     echo "Version created: versions/${VERSION_DIR}"
 
 
+# === MANUSCRIPT MERGE ===
+
+manuscript-version version:
+    qpdf --empty --pages *pdf  -- final_document.pdf
+
 # === Submissions ===
 
 #TODO: Automatically move the latest folder in a specific version series to submission.

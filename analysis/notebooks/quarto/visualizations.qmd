@@ -66,14 +66,16 @@ data$total_runtime_minutes <- sapply(data$total_runtime, convert_to_minutes)
 # Print the updated data frame
 #print(data)
 
+# CAPTION Growth of execution time for MTBseq-nf in default and parallel mode
+
 # Create the ggplot figure
 ggplot(data, aes(x = number_of_samples, y = total_runtime_minutes, color = execution_mode)) +
   geom_line() +
   geom_point() +
-  labs(title = "MTBseq-nf: Default vs Parallel mode",
-       x = "Number of Samples",
-       y = "Total Runtime (minutes)",
-       color = "Execution Mode") +
+  labs(title = "",
+       x = "Number of samples",
+       y = "Total runtime (minutes)",
+       color = "MTBseq-nf mode") +
   theme_bw()
 
 

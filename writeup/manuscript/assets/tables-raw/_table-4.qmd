@@ -5,7 +5,7 @@ author: ""
 format:
     docx: default
     typst:
-        mainfont: "Roboto"
+        mainfont: "Ubuntu"
         keep-typ: true
 
 tbl-cap-location: top
