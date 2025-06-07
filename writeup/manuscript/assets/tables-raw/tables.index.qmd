@@ -1,0 +1,19 @@
+---
+title: ""
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Ubuntu"
+        keep-typ: true
+execute:
+  echo: false
+  warning: false
+
+---
+
+
+{{< include _table-1.qmd >}}
+
+{{< include _table-2.qmd >}}

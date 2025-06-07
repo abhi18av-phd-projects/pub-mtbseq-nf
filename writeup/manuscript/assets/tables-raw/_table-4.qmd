@@ -16,6 +16,12 @@ execute:
 
 ---
 
+
+```{=typst}
+#set page(numbering: none)
+```
+
+
 ### Table 4. A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants.
 
 

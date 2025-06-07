@@ -17,6 +17,7 @@ execute:
 ---
 
 ```{=typst}
+#set page(numbering: none)
 #set page("a2")
 ```
 

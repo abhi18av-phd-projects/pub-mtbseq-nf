@@ -16,6 +16,10 @@ execute:
 
 ---
 
+```{=typst}
+#set page(numbering: none)
+```
+
 
 
 ```{=typst}

@@ -7,14 +7,17 @@ format:
     typst:
         mainfont: "Ubuntu"
         keep-typ: true
-
-tbl-cap-location: top
-
 execute:
   echo: false
   warning: false
 
 ---
+
+
+```{=typst}
+#set page(numbering: none)
+```
+
 
 ### Table 1. Summary of thematic enhancements in MTBseq-nf, Nextflow wrapper for the original MTBseq pipeline.
 
