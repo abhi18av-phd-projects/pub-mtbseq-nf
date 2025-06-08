@@ -3,6 +3,7 @@ channels = ["conda-forge", "bioconda", "r", "h2oai", "anaconda"]
 name = "pub-MTBseq-nf"
 platforms = ["linux-64", "osx-64"]
 
+# https://pixi.sh/latest/advanced/channel_logic/#force-a-specific-channel-priority
 [dependencies]
 python = "3.11.*"
 great_tables = ">=0.14.0,<0.18"

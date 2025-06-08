@@ -21,7 +21,7 @@ execute:
 #set page("a2")
 ```
 
-### FIXME
+### TABLE-6: FIXME
 
 ```{=typst}
 \
