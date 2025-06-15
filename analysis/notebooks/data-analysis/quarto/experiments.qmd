@@ -1,0 +1,97 @@
+```{r}
+
+#| fig-cap: "Figure-X: Variations across different MTBseq modes. Each panel shows differences for a specific parameter and comparison type. Only samples with non-zero differences are displayed."
+#| fig-height: 16
+#| fig-width: 12
+
+# Create a unified dataset for faceting
+# First, create datasets with source labels
+intra_standard_data <- ranges_standard_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq Standard (Intra-modal)")
+
+intra_default_data <- ranges_default_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq-nf Default (Intra-modal)")
+
+inter_standard_default_data <- ranges_standard_default_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq vs MTBseq-nf Default (Inter-modal)")
+
+inter_default_parallel_data <- ranges_default_parallel_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq-nf Default vs Parallel (Inter-modal)")
+
+# Combine all datasets
+all_variations <- bind_rows(
+  intra_standard_data,
+  intra_default_data,
+  inter_standard_default_data,
+  inter_default_parallel_data
+)
+
+# Create the faceted plot
+ggplot(all_variations, aes(x = Difference, y = SampleID, fill = Comparison)) +
+  geom_col() +
+  facet_grid(Parameter ~ Comparison, scales = "free", space = "free_y") +
+  scale_fill_viridis_d(option = "plasma", end = 0.9) +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(face = "bold"),
+    strip.background = element_rect(fill = "lightgray", color = NA),
+    panel.spacing = unit(0.5, "lines"),
+    axis.text.y = element_text(size = 7),
+    legend.position = "none"
+  ) +
+  labs(
+    x = "Difference (SNPs)",
+    y = "Sample ID"
+  )
+```
+
+
+
+```{r}
+
+#| fig-cap: "Figure-X: Comprehensive visualization of variations across different MTBseq modes. Each panel shows differences for a specific parameter and comparison type, with horizontal bars representing the magnitude of variation in SNPs. Only samples with non-zero differences are displayed."
+#| fig-height: 24
+#| fig-width: 16
+
+# Create a unified dataset for faceting
+# First, create datasets with source labels
+inter_standard_default_data <- ranges_standard_default_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq vs MTBseq-nf Default\n(Inter-modal)")
+
+inter_default_parallel_data <- ranges_default_parallel_with_ids |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(Comparison = "MTBseq-nf Default vs Parallel\n(Inter-modal)")
+
+# Combine all datasets
+all_variations <- bind_rows(
+  inter_standard_default_data,
+  inter_default_parallel_data
+)
+
+# Create the faceted plot with improved readability
+ggplot(all_variations, aes(x = Difference, y = SampleID, fill = Comparison)) +
+  geom_col() +
+  facet_grid(Parameter ~ Comparison, scales = "free", space = "free_y") +
+  scale_fill_brewer(palette = "Set2") +  # Color-blind friendly palette
+  theme_minimal(base_size = 14) +  # Larger base font size
+  theme(
+    strip.text = element_text(face = "bold", size = 16),
+    strip.background = element_rect(fill = "lightgray", color = NA),
+    panel.spacing = unit(1, "lines"),  # More space between panels
+    axis.text.y = element_text(size = 10),  # Larger sam
+
+# Save as a high-resolution image
+ggsave("analysis/figures/comprehensive_variations.png", width = 16, height = 24, dpi = 300)
+
+```

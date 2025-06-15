@@ -1,0 +1,210 @@
+---
+title: "MTBseq-nf"
+author: "Gian van der Spuy"
+date: last-modified
+date-format: D MMMM YYYY
+format:
+  html:
+    page-layout: full
+    default-image-extension: svg
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+editor: source
+---
+
+```{shell}
+# renv::restore()
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+#| layout-align: left
+
+# Load necessary libraries
+library(jsonlite)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+library(foreach)
+library(lubridate)
+library(svglite)
+library(kableExtra)
+library(UpSetR)
+library(grid)
+```
+
+# Read in the dataset and separate categorical/numerical columns
+
+```{r}
+#NOTE: Setup the dataframe for further analysis
+
+json <- fromJSON(txt = "analysis/data/02_intermediate/Statistics.json" , flatten=TRUE)
+
+experiments <- names(json$Experiments)
+
+for (experiment in experiments) {
+  lists <- lapply(json$Experiments[[experiment]]$statistics, as.list)
+  experiment <- gsub('-','_',experiment)
+  assign(experiment, as.data.frame(do.call(rbind, lists)))
+}
+
+experiments <- sapply(experiments, function(experiment) gsub('-','_',experiment), USE.NAMES = FALSE)
+
+rm(json,lists)
+
+for (experiment in experiments) {
+  assign(experiment, data.frame(apply(do.call(cbind, eval(as.symbol(experiment))),2, function(x) unlist(x,use.names = F))))
+}
+
+
+df <- bind_rows(mget(experiments), .id='id')
+
+sampleids <- df |>
+  filter(id == experiment) |>
+  select(SampleID)
+
+rm(experiment,experiments)
+
+rm(list = ls(pattern = '^mtbseq.*'))
+numericVars <- as.vector(names(df)[!names(df) %in% c('id','FullID','SampleID','Date','LibraryID', 'GCContentUnambiguous')])
+df <- cbind(df[c('id','SampleID')],apply(df[numericVars],2,as.numeric))
+```
+
+
+
+# (Intra-mode) `MTBseq` standard 
+
+```{r fig.width=10,fig.height=5}
+#| fig-cap: "Figure-X: Intra-modal variations in MTBseq. The differences across triplicated runs of MTBseq were observed only for one sample `4514-03` with the ENA ID `ERS458588`."
+#| fig-cap-location: top
+#| echo: false
+
+ranges_standard <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_standard_run1','pub_90samples_mtbseq_standard_run2','pub_90samples_mtbseq_standard_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_standard) <- numericVars
+
+ranges_standard.summary <- apply(ranges_standard,2, function(x) sum(x!=0))
+intraStandardVariants <- ranges_standard.summary[which(ranges_standard.summary > 0)]
+
+# Create a long-format dataframe for better visualization
+ranges_standard_long <- ranges_standard |>
+  bind_cols(SampleID = sampleids$SampleID) |>
+  select(SampleID, all_of(names(intraStandardVariants))) |>
+  pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+  filter(Difference > 0) |>
+  mutate(SampleID = factor(SampleID))
+
+# Single faceted plot
+ggplot(ranges_standard_long, aes(x = SampleID, y = Difference)) +
+  geom_col( alpha = 0.7) +
+  facet_wrap(~Parameter, scales = "free_y", ncol = 2) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Intra-modal Variations in MTBseq Standard Runs",
+       x = "Sample ID",
+       y = "Difference (SNPs)",
+       caption = "Only samples with variations are shown")
+
+```
+
+
+# (Intra-mode) `MTBseq-nf` (default) runs
+
+```{r fig.width=10,fig.height=5}
+#| fig-cap: "Figure-X: Intra-modal variations in MTBseq-nf (default). The differences across triplicated runs of MTBseq-nf (default) were observed only for two sample `3158-04` (`ERS458130`) and `5870-03` (`ERS457344`)."
+#| fig-cap-location: top
+#| echo: false
+
+ranges_default <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_nf_run1','pub_90samples_mtbseq_nf_run2','pub_90samples_mtbseq_nf_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_default) <- numericVars
+
+ranges_default.summary <- apply(ranges_default,2, function(x) sum(x!=0))
+
+intradefaultVariants <- ranges_default.summary[which(ranges_default.summary > 0)]
+
+ranges_default <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_nf_run1','pub_90samples_mtbseq_nf_run2','pub_90samples_mtbseq_nf_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_default) <- numericVars
+
+ranges_default.summary <- apply(ranges_default,2, function(x) sum(x!=0))
+intradefaultVariants <- ranges_default.summary[which(ranges_default.summary > 0)]
+
+# Create a long-format dataframe for better visualization (for ranges_default)
+ranges_default_long <- ranges_default |>
+    bind_cols(SampleID = sampleids$SampleID) |>
+    select(SampleID, all_of(names(intradefaultVariants))) |>
+    pivot_longer(cols = -SampleID, names_to = "Parameter", values_to = "Difference") |>
+    filter(Difference > 0) |>
+    mutate(SampleID = factor(SampleID))
+
+# Single faceted plot
+ggplot(ranges_default_long, aes(x = SampleID, y = Difference)) +
+    geom_col(alpha = 0.7) +
+    facet_wrap(~Parameter, scales = "free_y", ncol = 2) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    labs(title = "Intra-modal Variations in MTBseq-nf (default) Runs",
+             x = "Sample ID",
+             y = "Difference (SNPs)",
+             caption = "Only samples with variations are shown")
+
+```
+
+
+# (Intra-mode) `MTBseq-nf` (parallel) runs - < NO VARIATIONS >
+
+```{r fig.width=10,fig.height=10}
+#| echo: false
+ranges_parallel <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  diffs <- df |>
+    filter(id %in% c('pub_90samples_mtbseq_nf_parallel_run1','pub_90samples_mtbseq_nf_parallel_run2','pub_90samples_mtbseq_nf_parallel_run3')) |>
+    group_by(SampleID) |>
+    summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+  diffs[2]
+}
+names(ranges_parallel) <- numericVars
+
+ranges_parallel.summary <- apply(ranges_parallel,2, function(x) sum(x!=0))
+intraParallelVariants <- ranges_parallel.summary[which(ranges_parallel.summary > 0)]
+
+# graphs_parallel <- foreach (i=1:length(intraParallelVariants)) %do% {
+#   variant <- names(intraParallelVariants)[i]
+#   ranges_parallel |>
+#     select(all_of(variant)) |>
+#     arrange(.data[[variant]]) |>
+#     ggplot(aes(x=1:nrow(ranges_parallel),y=.data[[variant]])) +
+#     geom_point() +
+#     geom_line() +
+#     theme_grey() +
+#     ggtitle(variant) +
+#     theme(axis.title.x = element_blank()) +
+#     ylab("Difference")
+# }
+#
+# do.call("grid.arrange", c(graphs_parallel, ncol=3))
+```
+
+No variation
+

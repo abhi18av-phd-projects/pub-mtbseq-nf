@@ -1,0 +1,651 @@
+---
+title: "MTBseq-nf"
+author: "Gian van der Spuy"
+date: last-modified
+date-format: D MMMM YYYY
+format:
+  html:
+    page-layout: full
+    default-image-extension: svg
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+editor: source
+---
+
+```{shell}
+# renv::restore()
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+#| layout-align: left
+
+# Load necessary libraries
+library(jsonlite)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+library(foreach)
+library(lubridate)
+library(svglite)
+library(kableExtra)
+library(UpSetR)
+```
+
+# Read in the dataset and separate categorical/numerical columns
+
+```{r}
+#NOTE: Setup the dataframe for further analysis
+
+json <- fromJSON(txt = "analysis/data/02_intermediate/Statistics.json" , flatten=TRUE)
+
+experiments <- names(json$Experiments)
+
+for (experiment in experiments) {
+  lists <- lapply(json$Experiments[[experiment]]$statistics, as.list)
+  experiment <- gsub('-','_',experiment)
+  assign(experiment, as.data.frame(do.call(rbind, lists)))
+}
+
+experiments <- sapply(experiments, function(experiment) gsub('-','_',experiment), USE.NAMES = FALSE)
+
+rm(json,lists)
+
+for (experiment in experiments) {
+  assign(experiment, data.frame(apply(do.call(cbind, eval(as.symbol(experiment))),2, function(x) unlist(x,use.names = F))))
+}
+
+
+df <- bind_rows(mget(experiments), .id='id')
+
+sampleids <- df |>
+  filter(id == experiment) |>
+  select(SampleID)
+
+rm(experiment,experiments)
+
+rm(list = ls(pattern = '^mtbseq.*'))
+numericVars <- as.vector(names(df)[!names(df) %in% c('id','FullID','SampleID','Date','LibraryID', 'GCContentUnambiguous')])
+df <- cbind(df[c('id','SampleID')],apply(df[numericVars],2,as.numeric))
+```
+
+
+
+## (Inter-mode) Compare metrics of default `MTBseq-nf` (default) vs Standard `MTBseq`
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report."
+#| fig-cap-location: top
+
+
+ranges_standard_default <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_standard_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_standard_default) <- numericVars
+
+ranges_standard_default.summary <- apply(ranges_standard_default,2, function(x) sum(x!=0))
+interStandarddefaultVariants <- ranges_standard_default.summary[which(ranges_standard_default.summary > 0)]
+
+graphs_standard_default <- foreach (i=1:length(interStandarddefaultVariants)) %do% {
+  variant <- names(interStandarddefaultVariants)[i]
+  ranges_standard_default |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_standard_default),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    labs(title = "",
+        x = "Number of samples",
+        y = "Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_standard_default, ncol=3))
+
+```
+
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report."
+#| fig-cap-location: top
+
+ranges_standard_default <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_standard_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_standard_default) <- numericVars
+
+ranges_standard_default.summary <- apply(ranges_standard_default,2, function(x) sum(x!=0))
+interStandarddefaultVariants <- ranges_standard_default.summary[which(ranges_standard_default.summary > 0)]
+
+# Add SampleID to ranges_standard_default
+ranges_standard_default_with_ids <- ranges_standard_default |>
+  bind_cols(SampleID = sampleids$SampleID)
+
+# Create better visualizations
+graphs_standard_default <- foreach (i=1:length(interStandarddefaultVariants)) %do% {
+  variant <- names(interStandarddefaultVariants)[i]
+
+  # Filter to only show samples with non-zero differences
+  non_zero_samples <- ranges_standard_default_with_ids |>
+    filter(.data[[variant]] > 0) |>
+    select(SampleID, all_of(variant))
+
+  # Count of total samples vs samples with differences
+  total_samples <- nrow(ranges_standard_default)
+  diff_samples <- nrow(non_zero_samples)
+
+  ggplot(non_zero_samples, aes(x = SampleID, y = .data[[variant]])) +
+    geom_col(fill = "steelblue", width = 0.5) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold")) +
+    labs(
+      title = paste0(variant, " (", diff_samples, " of ", total_samples, " samples)"),
+      subtitle = "Only samples with non-zero differences shown",
+      x = "Sample ID",
+      y = "Difference (SNPs)"
+    )
+}
+
+do.call("grid.arrange", c(graphs_standard_default, ncol = 3))
+```
+
+## (Inter-mode) default `mtbseq-nf` vs Standard `mtbseq` Variant Samples
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants."
+#| tbl-cap-location: top
+
+parameters.of.interest <- ranges_standard_default.summary[ranges_standard_default.summary > 0 ]
+
+table_standard_default <-  sampleids |>
+      bind_cols(ranges_standard_default) |>
+      select(c('SampleID', names(parameters.of.interest))) %>%
+      filter(rowSums(.[,-1]) > 0) |>
+      mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X','')))
+
+# Save the table as CSV
+write.csv(table_standard_default, "analysis/data/02_intermediate/table-standard-default.csv", row.names = FALSE)
+
+# Save the table as Markdown
+writeLines(
+  knitr::kable(table_standard_default, format = "markdown"),
+  "analysis/data/02_intermediate/table-standard-default.md"
+)
+
+table_standard_default|>
+  kable(align = "c") |>
+  kable_classic()
+
+```
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (default vs Standard)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq and MTBseq-nf (default). A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants."
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_standard_default.summary[ranges_standard_default.summary > 0 ]
+
+ranges_standard_default |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```
+
+# (Inter-mode) Compare metrics of default `mtbseq-nf (default)` vs Parallel `mtbseq-nf`
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default)"
+#| fig-cap-location: top
+
+
+ranges_default_parallel <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_nf_parallel_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_default_parallel) <- numericVars
+
+ranges_default_parallel.summary <- apply(ranges_default_parallel,2, function(x) sum(x!=0))
+interdefaultParallelVariants <- ranges_default_parallel.summary[which(ranges_default_parallel.summary > 0)]
+
+graphs_defaultParallel <- foreach (i=1:length(interdefaultParallelVariants)) %do% {
+  variant <- names(interdefaultParallelVariants)[i]
+  ranges_default_parallel |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_default_parallel),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    labs(title = "",
+        x = "Number of samples",
+        y = "Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_defaultParallel, ncol=3))
+```
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations between MTBseq-nf default and parallel modes. The differences are highlighted for samples showing non-zero variations."
+#| fig-cap-location: top
+
+ranges_default_parallel <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_run',j),paste0('pub_90samples_mtbseq_nf_parallel_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_default_parallel) <- numericVars
+
+ranges_default_parallel.summary <- apply(ranges_default_parallel,2, function(x) sum(x!=0))
+interdefaultParallelVariants <- ranges_default_parallel.summary[which(ranges_default_parallel.summary > 0)]
+
+# Add SampleID to ranges_default_parallel
+ranges_default_parallel_with_ids <- ranges_default_parallel |>
+  bind_cols(SampleID = sampleids$SampleID)
+
+# Create better visualizations
+graphs_defaultParallel <- foreach (i=1:length(interdefaultParallelVariants)) %do% {
+  variant <- names(interdefaultParallelVariants)[i]
+
+  # Filter to only show samples with non-zero differences
+  non_zero_samples <- ranges_default_parallel_with_ids |>
+    filter(.data[[variant]] > 0) |>
+    select(SampleID, all_of(variant))
+
+  # Count of total samples vs samples with differences
+  total_samples <- nrow(ranges_default_parallel)
+  diff_samples <- nrow(non_zero_samples)
+
+  ggplot(non_zero_samples, aes(x = SampleID, y = .data[[variant]])) +
+    geom_col(fill = "steelblue", width = 0.5) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold")) +
+    labs(
+      title = paste0(variant, " (", diff_samples, " of ", total_samples, " samples)"),
+      subtitle = "Only samples with non-zero differences shown",
+      x = "Sample ID",
+      y = "Difference (SNPs)"
+    )
+}
+
+do.call("grid.arrange", c(graphs_defaultParallel, ncol = 3))
+```
+
+
+
+## (Inter-mode) default vs Parallel Variant Samples (default vs Parallel)
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default), a total of 70 samples showed variations across 9 metrics in the statistics report, parameters with fewer than 10 variants."
+#| tbl-cap-location: top
+
+parameters.of.interest <- ranges_default_parallel.summary[ranges_default_parallel.summary > 0 ]
+
+table_default_parallel <- sampleids |>
+  bind_cols(ranges_default_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X','')))
+
+# Save the table as CSV
+write.csv(table_default_parallel, "analysis/data/02_intermediate/table-default-parallel.csv", row.names = FALSE)
+
+# Save the table as Markdown
+writeLines(
+  knitr::kable(table_default_parallel, format = "markdown"),
+  "analysis/data/02_intermediate/table-default-parallel.md"
+)
+
+table_default_parallel |>
+  kable(align = "c") |>
+  kable_classic()
+
+```
+
+
+```{r}
+
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default). A total of 70 samples showed variations across 9 metrics. The UpSet plot (top) shows intersections of parameters where samples have variations, while the heatmap (bottom) shows the pattern of variations across samples."
+#| fig-height: 12
+
+# Create a binary matrix for the UpSetR plot
+binary_matrix <- sampleids |>
+  bind_cols(ranges_default_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) as.integer(x > 0)))
+
+# Set row names for the matrix
+rownames(binary_matrix) <- binary_matrix$SampleID
+binary_matrix$SampleID <- NULL
+
+# Create a layout with 2 plots
+layout(matrix(c(1,2), nrow=2, byrow=TRUE), heights=c(5,7))
+
+# 1. UpSetR plot showing intersections
+upset(binary_matrix,
+      nsets = ncol(binary_matrix),
+      order.by = "freq",
+      main.bar.color = "steelblue",
+      sets.bar.color = "darkblue",
+      text.scale = 1.2,
+      sets.x.label = "Samples with\nvariations")
+
+# 2. Simplified heatmap
+# Convert binary data to long format for ggplot
+heatmap_data <- sampleids |>
+  bind_cols(ranges_default_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  pivot_longer(cols = -SampleID,
+               names_to = "Parameter",
+               values_to = "Value") |>
+  mutate(Has_Variation = ifelse(Value > 0, "Yes", "No"))
+
+# Order parameters by frequency of variations
+param_order <- heatmap_data |>
+  filter(Has_Variation == "Yes") |>
+  count(Parameter) |>
+  arrange(desc(n)) |>
+  pull(Parameter)
+
+# Order samples by number of parameters with variations
+sample_order <- heatmap_data |>
+  filter(Has_Variation == "Yes") |>
+  count(SampleID) |>
+  arrange(desc(n)) |>
+  pull(SampleID)
+
+# Create the heatmap
+ggplot(heatmap_data,
+       aes(x = factor(Parameter, levels = param_order),
+           y = factor(SampleID, levels = sample_order),
+           fill = Has_Variation)) +
+  geom_tile(color = "white", size = 0.1) +
+  scale_fill_manual(values = c("No" = "white", "Yes" = "steelblue")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid = element_blank()) +
+  labs(x = "Parameter", y = "Sample ID", fill = "Has Variation")
+```
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default). A total of 70 samples showed variations across 9 metrics. The UpSet plot (top) shows intersections of parameters where samples have variations, while the heatmap (bottom) shows the magnitude of variations using a color gradient."
+#| fig-height: 12
+
+# Create a binary matrix for the UpSetR plot
+binary_matrix <- sampleids |>
+  bind_cols(ranges_default_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) as.integer(x > 0)))
+
+# Set row names for the matrix
+rownames(binary_matrix) <- binary_matrix$SampleID
+binary_matrix$SampleID <- NULL
+
+# Create a layout with 2 plots
+layout(matrix(c(1,2), nrow=2, byrow=TRUE), heights=c(5,7))
+
+# 1. UpSetR plot showing intersections
+upset(binary_matrix,
+      nsets = ncol(binary_matrix),
+      order.by = "freq",
+      main.bar.color = "steelblue",
+      sets.bar.color = "darkblue",
+      text.scale = 1.2,
+      sets.x.label = "Samples with\nvariations")
+
+# 2. Heatmap with color gradient showing magnitude of variations
+# Convert data to long format for ggplot, keeping actual values
+heatmap_data <- sampleids |>
+  bind_cols(ranges_default_parallel) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  pivot_longer(cols = -SampleID,
+               names_to = "Parameter",
+               values_to = "Value")
+
+# Order parameters by frequency of variations
+param_order <- heatmap_data |>
+  filter(Value > 0) |>
+  count(Parameter) |>
+  arrange(desc(n)) |>
+  pull(Parameter)
+
+# Order samples by number of parameters with variations
+sample_order <- heatmap_data |>
+  filter(Value > 0) |>
+  count(SampleID) |>
+  arrange(desc(n)) |>
+  pull(SampleID)
+
+# Create the heatmap with gradient colors
+
+ggplot(heatmap_data,
+        aes(x = factor(Parameter, levels = param_order),
+            y = factor(SampleID, levels = sample_order),
+           fill = Value)) +
+   geom_tile(color = "white", size = 0.1) +
+   scale_fill_viridis_c(option = "viridis", direction = 1,
+                        name = "Variation\nMagnitude",
+                        na.value = "white") +
+   theme_minimal() +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1),
+         panel.grid = element_blank()) +
+   labs(x = "Parameter", y = "Sample ID")
+
+
+```
+
+
+
+```{r}
+
+# Create better visualizations
+graphs_defaultParallel <- foreach (i=1:length(interdefaultParallelVariants)) %do% {
+  variant <- names(interdefaultParallelVariants)[i]
+
+  # Filter to only show samples with non-zero differences
+  non_zero_samples <- ranges_default_parallel_with_ids |>
+    filter(.data[[variant]] > 0) |>
+    select(SampleID, all_of(variant))
+
+  # Count of total samples vs samples with differences
+  total_samples <- nrow(ranges_default_parallel)
+  diff_samples <- nrow(non_zero_samples)
+
+  ggplot(non_zero_samples, aes(x = SampleID, y = .data[[variant]])) +
+    geom_col(fill = "steelblue", width = 0.5) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold")) +
+    labs(
+      title = paste0(variant, " (", diff_samples, " of ", total_samples, " samples)"),
+      subtitle = "Only samples with non-zero differences shown",
+      x = "Sample ID",
+      y = "Difference (SNPs)"
+    )
+}
+
+# Arrange all plots horizontally in a single row
+do.call("grid.arrange", c(graphs_defaultParallel, nrow = 1))
+```
+
+
+```{r}
+# Create better visualizations with swapped axes (horizontal bar charts)
+graphs_defaultParallel <- foreach (i=1:length(interdefaultParallelVariants)) %do% {
+  variant <- names(interdefaultParallelVariants)[i]
+
+  # Filter to only show samples with non-zero differences
+  non_zero_samples <- ranges_default_parallel_with_ids |>
+    filter(.data[[variant]] > 0) |>
+    select(SampleID, all_of(variant))
+
+  # Count of total samples vs samples with differences
+  total_samples <- nrow(ranges_default_parallel)
+  diff_samples <- nrow(non_zero_samples)
+
+  ggplot(non_zero_samples, aes(y = SampleID, x = .data[[variant]])) +
+    geom_col(fill = "steelblue") +
+    theme_minimal() +
+    theme(axis.text.y = element_text(hjust = 1)) +
+    labs(
+      title = paste0(variant, " (", diff_samples, " of ", total_samples, " samples)"),
+      subtitle = "Only samples with non-zero differences shown",
+      y = "Sample ID",
+      x = "Difference (SNPs)"
+    )
+}
+
+# Arrange all plots vertically in a single column
+do.call("grid.arrange", c(graphs_defaultParallel, ncol = 1))
+```
+
+
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (MTBseq-nf default vs Parallel)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-nf (default), upset plot."
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_default_parallel.summary[ranges_default_parallel.summary > 0 ]
+
+ranges_default_parallel |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```
+
+# (Inter-mode) Compare metrics of Standard vs Parallel
+
+```{r fig.width=10,fig.height=10}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq."
+#| fig-cap-location: top
+
+ranges_parallel_standard <- foreach(i=1:length(numericVars), .combine = cbind) %do% {
+  alldiffs <- foreach(j=1:3, .combine = cbind) %do% {
+    diffs <- df |>
+      filter(id %in% c(paste0('pub_90samples_mtbseq_nf_parallel_run',j),paste0('pub_90samples_mtbseq_standard_run',j))) |>
+      group_by(SampleID) |>
+      summarise(range = max(eval(as.symbol(numericVars[i]))) - min(eval(as.symbol(numericVars[i]))))
+    diffs[2]
+  }
+  as.data.frame(apply(alldiffs,1,max))
+}
+
+names(ranges_parallel_standard) <- numericVars
+
+ranges_parallel_standard.summary <- apply(ranges_parallel_standard,2, function(x) sum(x!=0))
+interParallelStandard <- ranges_parallel_standard.summary[which(ranges_parallel_standard.summary > 0)]
+
+graphs_ParallelStandard <- foreach (i=1:length(interParallelStandard)) %do% {
+  variant <- names(interParallelStandard)[i]
+  ranges_parallel_standard |>
+    select(all_of(variant)) |>
+    arrange(.data[[variant]]) |>
+    ggplot(aes(x=1:nrow(ranges_parallel_standard),y=.data[[variant]])) +
+    geom_point() +
+    geom_line() +
+    theme_grey() +
+    theme_bw() +
+    ggtitle(variant) +
+    labs(title = "",
+        x = "ID of samples",
+        y = "Differences (SNPs)")
+}
+
+do.call("grid.arrange", c(graphs_ParallelStandard, ncol=3))
+```
+
+## (Inter-mode) Standard vs Parallel Variant Samples
+
+*(Parameters with fewer than 10 variants)*
+
+```{r fig.width=15}
+#| tbl-cap: "Table-X: MTBseq-nf (parallel) vs MTBseq, a total of "
+#| tbl-cap-location: top
+
+parameters.of.interest <- ranges_parallel_standard.summary[ranges_parallel_standard.summary > 0 ]
+
+table_ranges_parallel_standard = sampleids |>
+  bind_cols(ranges_parallel_standard) |>
+  select(c('SampleID', names(parameters.of.interest))) %>%
+  filter(rowSums(.[,-1]) > 0) |>
+  mutate(across(2:last_col(), function(x) ifelse(x > 0, 'X','')))
+
+# Save the table as CSV
+write.csv(table_ranges_parallel_standard, "analysis/data/02_intermediate/table-parallel-standard.csv", row.names = FALSE)
+
+# Save the table as Markdown
+writeLines(
+  knitr::kable(table_ranges_parallel_standard, format = "markdown"),
+  "analysis/data/02_intermediate/table-parallel-standard.md"
+)
+
+table_ranges_parallel_standard |>
+  kable(align = "c") |>
+  kable_classic()
+
+```
+
+## (Inter-mode) UpSet Plot for Parameters Sharing Common Variant Samples (Standard vs Parallel)
+
+```{r}
+#| fig-cap: "Figure-X: Inter-modal variations in MTBseq-nf (parallel) vs MTBseq, a total of 70 samples"
+#| fig-cap-location: top
+
+parameters.of.interest <- ranges_parallel_standard.summary[ranges_parallel_standard.summary > 0 ]
+
+ranges_parallel_standard |>
+  select(c(names(parameters.of.interest))) %>%
+  filter(rowSums(.) > 0) |>
+  mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
+  upset()
+```

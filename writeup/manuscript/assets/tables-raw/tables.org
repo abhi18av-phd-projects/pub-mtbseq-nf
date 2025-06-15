@@ -1,4 +1,5 @@
-* Table-1
+* Table-1: Summary of thematic enhancements in MTBseq-nf, Nextflow wrapper for the original MTBseq pipeline.
+
 
   | *Theme*           | *Feature*                     |
   |-------------------+-------------------------------|
@@ -25,38 +26,38 @@
   | Reproducibility   | Save intermediate files       |
 
 
-* Table-2
+* Table-2: Summary of intra-modal analysis of principal outputs of triplicated runs. Notably, MTBseq-nf (parallel) mode does not have any differences in the principal results.
 
-  | *Principal output* | *MTBseq (standard)*  | *MTBseq-nf (default mode)* | *MTBseq-nf (parallel mode)* |
-  |----------------------|--------------------------|--------------------------------|---------------------------------|
-  | Classification       | No differences           | No differences                 | No differences                  |
-  | SNP distance matrix  | No differences           | No differences                 | No differences                  |
-  | Phylogenetic tree    | No differences           | No differences                 | No differences                  |
-  | Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
-  | Statistics           | Minor differences        | Minor differences              | No differences                  |
 
-* Table-3
+  | *Principal output*  | *MTBseq (standard)*      | *MTBseq-nf (default mode)* | *MTBseq-nf (parallel mode)* |
+  |---------------------+--------------------------+----------------------------+-----------------------------|
+  | Classification      | No differences           | No differences             | No differences              |
+  | SNP distance matrix | No differences           | No differences             | No differences              |
+  | Phylogenetic tree   | No differences           | No differences             | No differences              |
+  | Cluster groups      | Consistent agglomeration | Consistent agglomeration   | Consistent agglomeration    |
+  | Statistics          | Minor differences        | Minor differences          | No differences              |
+
+* Table-3: Growth of total execution time (runtime) of different modes of MTBseq-nf for 5 datasets with increasing cohort size.
 
   | *Number of samples* | *MTBseq-nf (default)* | *MTBseq-nf (parallel)* |
-  |---------------------|-----------------------|------------------------|
-  | 05                  | 0h53m0s               | 0h34m0s                |
-  | 10                  | 2h2m0s                | 1h0m45s                |
-  | 20                  | 4h32m0s               | 1h53m0s                |
-  | 40                  | 8h57m0s               | 4h43m0s                |
-  | 80                  | 18h32m0s              | 7h14m0s                |
+  |---------------------+-----------------------+------------------------|
+  |                  05 | 0h53m0s               | 0h34m0s                |
+  |                  10 | 2h2m0s                | 1h0m45s                |
+  |                  20 | 4h32m0s               | 1h53m0s                |
+  |                  40 | 8h57m0s               | 4h43m0s                |
+  |                  80 | 18h32m0s              | 7h14m0s                |
 
 
-* Table-4
+* Table-4: Inter-modal comparison of MTBseq vs MTBseq-nf (parallel). A total of 3 samples showed variations across 4 metrics in the statistics report, parameters with fewer than 10 variants.
 
-  | *SampleID*   | *Uncovered*   | *TotalBasesUnambiguous*   | *TotalBases*   |
-  |----------|-----------|-----------------------|------------|
-  | 3496-04  | X         | X                     | X          |
-  | 5870-03  | X         | X                     | X          |
-  | 6639-04  |           | X                     |            |
+  | *SampleID* | *Uncovered* | *TotalBasesUnambiguous* | *TotalBases* |
+  |------------+-------------+-------------------------+--------------|
+  |    3496-04 | X           | X                       | X            |
+  |    5870-03 | X           | X                       | X            |
+  |    6639-04 |             | X                       |              |
 
 
-* Table-5
-
+* Table-5: Inter-modal variations in MTBseq (parallel) vs MTBseq-nf (default), a total of 70 samples showed variations across 9 metrics in the statistics report, parameters with fewer than 10 variants.
 
   | *SampleID* | *TotalReads* | *MappedReads* | *Uncovered* | *TotalBasesUnambiguous* | *CoverageMeanUnambiguous* | *CoverageMean* | *TotalBases* | *CoverageMedian* |
   |------------+--------------+---------------+-------------+-------------------------+---------------------------+----------------+--------------+------------------|
@@ -70,6 +71,7 @@
   |    1780-04 |              |               | X           | X                       |                           |                | X            |                  |
   |    1783-04 |              | X             | X           |                         |                           |                | X            |                  |
   |    2509-04 |              |               |             | X                       |                           |                |              |                  |
+  |    3154-04 |              | X             |             |                         |                           |                |              |                  |
   |    3156-04 |              |               | X           | X                       |                           |                | X            |                  |
   |    3158-04 |              | X             |             | X                       |                           |                |              |                  |
   |    3491-04 |              | X             |             |                         |                           |                |              |                  |
@@ -78,7 +80,7 @@
   |    3736-04 |              | X             | X           | X                       |                           |                | X            |                  |
   |    3859-03 | X            |               | X           |                         |                           |                | X            |                  |
   |    3861-03 |              | X             | X           | X                       |                           |                | X            |                  |
-  |    4139-04 |              |               | X           | X                       |                           |                | X            |                  | |    6429-03 | X            | X             | X           |                         |                           |                | X            |                  | |   11822-03 |              | X             | X           |                         |                           |                | X            |                  | |    4783-04 |              | X             |             |                         |                           |                |              |                  | |    6892-04 |              | X             | X           | X                       |                           |                | X            |                  | |    3154-04 |              | X             |             |                         |                           |                |              |                  | |   10350-03 |              |               |             | X                       |                           |                |              |                  |
+  |    4139-04 |              |               | X           | X                       |                           |                | X            |                  |
   |    4148-04 |              | X             |             | X                       |                           |                |              |                  |
   |    4514-03 |              | X             |             | X                       |                           |                |              |                  |
   |    4516-03 |              | X             |             |                         |                           |                |              |                  |
@@ -88,6 +90,7 @@
   |    4717-04 |              | X             |             |                         |                           |                |              |                  |
   |    4724-03 |              | X             |             | X                       |                           |                |              |                  |
   |    4781-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    4783-04 |              | X             |             |                         |                           |                |              |                  |
   |    4785-04 | X            | X             |             |                         |                           |                |              |                  |
   |    5248-04 |              |               |             | X                       |                           |                |              |                  |
   |    5253-04 | X            | X             | X           | X                       |                           |                | X            |                  |
@@ -96,6 +99,7 @@
   |    5687-04 | X            | X             |             | X                       |                           |                |              |                  |
   |    5870-03 |              |               | X           | X                       |                           |                | X            |                  |
   |    5872-03 |              | X             |             |                         |                           |                |              |                  |
+  |    6429-03 | X            | X             | X           |                         |                           |                | X            |                  |
   |    6435-03 |              | X             | X           |                         |                           |                | X            |                  |
   |    6463-04 |              | X             |             | X                       |                           |                |              |                  |
   |    6467-04 | X            | X             |             |                         |                           |                |              |                  |
@@ -105,6 +109,7 @@
   |    6769-04 |              | X             |             |                         |                           |                |              |                  |
   |    6771-04 |              |               | X           | X                       |                           |                | X            |                  |
   |    6775-04 |              |               | X           | X                       |                           |                | X            |                  |
+  |    6892-04 |              | X             | X           | X                       |                           |                | X            |                  |
   |    6895-04 |              | X             | X           | X                       |                           |                | X            |                  |
   |    6897-04 | X            | X             |             |                         |                           |                |              |                  |
   |    7135-04 | X            | X             | X           | X                       | X                         | X              | X            |                  |
@@ -119,13 +124,15 @@
   |   10205-03 |              | X             |             |                         |                           |                |              |                  |
   |   10206-03 |              | X             |             |                         |                           |                |              |                  |
   |   10348-03 |              | X             |             |                         |                           |                |              |                  |
+  |   10350-03 |              |               |             | X                       |                           |                |              |                  |
   |   10517-03 |              | X             |             |                         |                           |                |              |                  |
   |   11818-03 | X            | X             |             | X                       |                           |                |              |                  |
   |   11821-03 |              | X             | X           |                         |                           |                | X            |                  |
+  |   11822-03 |              | X             | X           |                         |                           |                | X            |                  |
   |   12655-03 | X            | X             | X           | X                       |                           |                | X            |                  |
   |   12657-03 |              | X             |             | X                       |                           |                |              |                  |
 
-* Table-6
+* Table-6 : Inter-modal variations in MTBseq-nf (parallel) vs MTBseq-standard, FIXME
 
   | *SampleID*   | *TotalReads*   | *MappedReads*   | *GCContentUnambiguous*   | *Uncovered*   | *TotalBasesUnambiguous*   | *CoverageMeanUnambiguous*   | *CoverageMean*   | *TotalBases*   | *CoverageMedian*   |
   | ------------ |----------------|-----------------|--------------------------|---------------|---------------------------|-----------------------------|------------------|----------------|--------------------|

@@ -1,0 +1,84 @@
+---
+title: "MTBseq-nf"
+author: "Gian van der Spuy"
+date: last-modified
+date-format: D MMMM YYYY
+format:
+  html:
+    page-layout: full
+    default-image-extension: svg
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+editor: source
+---
+
+```{shell}
+# renv::restore()
+```
+
+
+```{r}
+#| echo: false
+#| output: false
+#| layout-align: left
+
+# Load necessary libraries
+library(jsonlite)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+library(foreach)
+library(lubridate)
+library(svglite)
+library(kableExtra)
+library(UpSetR)
+library(grid)
+```
+
+```{r}
+
+#| fig-cap: "Figure-1: The growth of total runtime of the MTBseq-nf parallel mode and default mode versus the sample size."
+
+# Read the data into a data frame
+data <- read.csv("analysis/data/02_intermediate/execution-times.csv", stringsAsFactors = FALSE)
+
+
+# Convert total_runtime to minutes
+convert_to_minutes <- function(runtime) {
+  # Check if the runtime contains hours
+  if (grepl("h", runtime)) {
+    # Convert to period and then to minutes
+    period <- hms(runtime)
+    as.numeric(period_to_seconds(period) / 60)
+  } else {
+    # Convert to period and then to minutes
+    period <- ms(runtime)
+    as.numeric(period_to_seconds(period) / 60)
+  }
+}
+
+# Apply the conversion function to the total_runtime column
+data$total_runtime_minutes <- sapply(data$total_runtime, convert_to_minutes)
+
+# Print the updated data frame
+#print(data)
+
+# CAPTION Growth of execution time for MTBseq-nf in default and parallel mode
+
+# Create the ggplot figure
+ggplot(data, aes(x = number_of_samples, y = total_runtime_minutes, color = execution_mode)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Growth of execution time of MTBseq-nf pipeline (default and parallel modes) with number of sequences",
+       x = "Number of sequences",
+       y = "Total runtime (minutes)",
+       color = "MTBseq-nf mode") +
+  theme_bw()
+
+
+```
+
