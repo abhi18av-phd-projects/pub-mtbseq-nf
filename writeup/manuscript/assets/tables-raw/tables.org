@@ -1,0 +1,201 @@
+* Table-1
+
+  | *Theme*           | *Feature*                     |
+  |-------------------+-------------------------------|
+  | User-friendliness | Ease of download              |
+  | User-friendliness | Explicit samplesheet          |
+  | User-friendliness | Graphical user interface      |
+  | User-friendliness | MultiQC Summary report        |
+  | User-friendliness | CSV and TSV format cleanup    |
+  | User-friendliness | Remote monitoring             |
+  | User-friendliness | Manual steps                  |
+  | User-friendliness | Flexible output location      |
+  | Maintainability   | Extensibility                 |
+  | Maintainability   | Module testing                |
+  | Maintainability   | Test dataset                  |
+  | Scalability       | Parallel execution            |
+  | Scalability       | HPC compatibility             |
+  | Scalability       | Resource allocation           |
+  | Scalability       | Dynamic retries               |
+  | Scalability       | Execution cache               |
+  | Scalability       | Reduced data footprint        |
+  | Scalability       | Reduced cloud computing costs |
+  | Reproducibility   | Declarative parameters file   |
+  | Reproducibility   | Portability                   |
+  | Reproducibility   | Save intermediate files       |
+
+
+* Table-2
+
+  | *Principal output* | *MTBseq (standard)*  | *MTBseq-nf (default mode)* | *MTBseq-nf (parallel mode)* |
+  |----------------------|--------------------------|--------------------------------|---------------------------------|
+  | Classification       | No differences           | No differences                 | No differences                  |
+  | SNP distance matrix  | No differences           | No differences                 | No differences                  |
+  | Phylogenetic tree    | No differences           | No differences                 | No differences                  |
+  | Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
+  | Statistics           | Minor differences        | Minor differences              | No differences                  |
+
+* Table-3
+
+  | *Number of samples* | *MTBseq-nf (default)* | *MTBseq-nf (parallel)* |
+  |---------------------|-----------------------|------------------------|
+  | 05                  | 0h53m0s               | 0h34m0s                |
+  | 10                  | 2h2m0s                | 1h0m45s                |
+  | 20                  | 4h32m0s               | 1h53m0s                |
+  | 40                  | 8h57m0s               | 4h43m0s                |
+  | 80                  | 18h32m0s              | 7h14m0s                |
+
+
+* Table-4
+
+  | *SampleID*   | *Uncovered*   | *TotalBasesUnambiguous*   | *TotalBases*   |
+  |----------|-----------|-----------------------|------------|
+  | 3496-04  | X         | X                     | X          |
+  | 5870-03  | X         | X                     | X          |
+  | 6639-04  |           | X                     |            |
+
+
+* Table-5
+
+
+  | *SampleID* | *TotalReads* | *MappedReads* | *Uncovered* | *TotalBasesUnambiguous* | *CoverageMeanUnambiguous* | *CoverageMean* | *TotalBases* | *CoverageMedian* |
+  |------------+--------------+---------------+-------------+-------------------------+---------------------------+----------------+--------------+------------------|
+  |     420-04 | X            |               | X           | X                       |                           | X              | X            |                  |
+  |     421-04 |              |               | X           | X                       | X                         | X              | X            | X                |
+  |    1324-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    1327-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    1597-04 |              | X             |             |                         |                           |                |              |                  |
+  |    1599-04 | X            | X             |             | X                       |                           |                |              |                  |
+  |    1779-04 |              | X             |             |                         |                           |                |              |                  |
+  |    1780-04 |              |               | X           | X                       |                           |                | X            |                  |
+  |    1783-04 |              | X             | X           |                         |                           |                | X            |                  |
+  |    2509-04 |              |               |             | X                       |                           |                |              |                  |
+  |    3156-04 |              |               | X           | X                       |                           |                | X            |                  |
+  |    3158-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    3491-04 |              | X             |             |                         |                           |                |              |                  |
+  |    3497-04 | X            | X             |             | X                       |                           |                |              |                  |
+  |    3734-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    3736-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    3859-03 | X            |               | X           |                         |                           |                | X            |                  |
+  |    3861-03 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    4139-04 |              |               | X           | X                       |                           |                | X            |                  | |    6429-03 | X            | X             | X           |                         |                           |                | X            |                  | |   11822-03 |              | X             | X           |                         |                           |                | X            |                  | |    4783-04 |              | X             |             |                         |                           |                |              |                  | |    6892-04 |              | X             | X           | X                       |                           |                | X            |                  | |    3154-04 |              | X             |             |                         |                           |                |              |                  | |   10350-03 |              |               |             | X                       |                           |                |              |                  |
+  |    4148-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    4514-03 |              | X             |             | X                       |                           |                |              |                  |
+  |    4516-03 |              | X             |             |                         |                           |                |              |                  |
+  |    4518-03 | X            | X             |             | X                       |                           |                |              |                  |
+  |    4523-03 |              | X             |             |                         |                           |                |              |                  |
+  |    4714-04 |              |               |             | X                       |                           |                |              |                  |
+  |    4717-04 |              | X             |             |                         |                           |                |              |                  |
+  |    4724-03 |              | X             |             | X                       |                           |                |              |                  |
+  |    4781-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    4785-04 | X            | X             |             |                         |                           |                |              |                  |
+  |    5248-04 |              |               |             | X                       |                           |                |              |                  |
+  |    5253-04 | X            | X             | X           | X                       |                           |                | X            |                  |
+  |    5468-03 | X            | X             | X           | X                       |                           |                | X            |                  |
+  |    5685-04 |              | X             |             |                         |                           |                |              |                  |
+  |    5687-04 | X            | X             |             | X                       |                           |                |              |                  |
+  |    5870-03 |              |               | X           | X                       |                           |                | X            |                  |
+  |    5872-03 |              | X             |             |                         |                           |                |              |                  |
+  |    6435-03 |              | X             | X           |                         |                           |                | X            |                  |
+  |    6463-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    6467-04 | X            | X             |             |                         |                           |                |              |                  |
+  |    6637-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    6639-04 |              | X             |             | X                       |                           |                |              |                  |
+  |    6640-04 | X            | X             |             |                         |                           |                |              |                  |
+  |    6769-04 |              | X             |             |                         |                           |                |              |                  |
+  |    6771-04 |              |               | X           | X                       |                           |                | X            |                  |
+  |    6775-04 |              |               | X           | X                       |                           |                | X            |                  |
+  |    6895-04 |              | X             | X           | X                       |                           |                | X            |                  |
+  |    6897-04 | X            | X             |             |                         |                           |                |              |                  |
+  |    7135-04 | X            | X             | X           | X                       | X                         | X              | X            |                  |
+  |    7514-04 | X            | X             | X           |                         |                           |                | X            |                  |
+  |    7520-04 |              |               |             | X                       |                           |                |              |                  |
+  |    7538-03 |              | X             |             | X                       |                           |                |              |                  |
+  |    8082-03 |              |               |             | X                       |                           |                |              |                  |
+  |    8864-03 |              | X             |             | X                       |                           |                |              |                  |
+  |    8867-03 | X            | X             |             |                         |                           |                |              |                  |
+  |    8868-03 |              | X             | X           | X                       |                           |                | X            |                  |
+  |   10011-03 | X            | X             |             |                         |                           |                |              |                  |
+  |   10205-03 |              | X             |             |                         |                           |                |              |                  |
+  |   10206-03 |              | X             |             |                         |                           |                |              |                  |
+  |   10348-03 |              | X             |             |                         |                           |                |              |                  |
+  |   10517-03 |              | X             |             |                         |                           |                |              |                  |
+  |   11818-03 | X            | X             |             | X                       |                           |                |              |                  |
+  |   11821-03 |              | X             | X           |                         |                           |                | X            |                  |
+  |   12655-03 | X            | X             | X           | X                       |                           |                | X            |                  |
+  |   12657-03 |              | X             |             | X                       |                           |                |              |                  |
+
+* Table-6
+
+  | *SampleID*   | *TotalReads*   | *MappedReads*   | *GCContentUnambiguous*   | *Uncovered*   | *TotalBasesUnambiguous*   | *CoverageMeanUnambiguous*   | *CoverageMean*   | *TotalBases*   | *CoverageMedian*   |
+  | ------------ |----------------|-----------------|--------------------------|---------------|---------------------------|-----------------------------|------------------|----------------|--------------------|
+  | 420-04       | X              |                 |                          | X             | X                         |                             | X                | X              |                    |
+  | 421-04       |                |                 |                          | X             | X                         | X                           | X                | X              | X                  |
+  | 1324-04      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 1327-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 1597-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 1599-04      | X              | X               |                          |               | X                         |                             |                  |                |                    |
+  | 1779-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 1780-04      |                |                 |                          | X             | X                         |                             |                  | X              |                    |
+  | 1783-04      |                | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 2509-04      |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 3154-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 3156-04      |                |                 |                          | X             | X                         |                             |                  | X              |                    |
+  | 3158-04      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 3491-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 3496-04      |                |                 | X                        | X             | X                         |                             |                  | X              |                    |
+  | 3497-04      | X              | X               |                          |               | X                         |                             |                  |                |                    |
+  | 3734-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 3736-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 3859-03      | X              |                 |                          | X             |                           |                             |                  | X              |                    |
+  | 3861-03      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 4139-04      |                |                 |                          | X             | X                         |                             |                  | X              |                    |
+  | 4148-04      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 4514-03      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 4516-03      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 4518-03      | X              | X               |                          |               | X                         |                             |                  |                |                    |
+  | 4523-03      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 4714-04      |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 4717-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 4724-03      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 4781-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 4783-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 4785-04      | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 5248-04      |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 5253-04      | X              | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 5468-03      | X              | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 5685-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 5687-04      | X              | X               |                          |               | X                         |                             |                  |                |                    |
+  | 5872-03      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 6429-03      | X              | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 6435-03      |                | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 6463-04      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 6467-04      | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 6637-04      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 6639-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 6640-04      | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 6769-04      |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 6771-04      |                |                 |                          | X             | X                         |                             |                  | X              |                    |
+  | 6775-04      |                |                 |                          | X             | X                         |                             |                  | X              |                    |
+  | 6892-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 6895-04      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 6897-04      | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 7135-04      | X              | X               |                          | X             | X                         | X                           | X                | X              |                    |
+  | 7514-04      | X              | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 7520-04      |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 7538-03      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 8082-03      |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 8864-03      |                | X               |                          |               | X                         |                             |                  |                |                    |
+  | 8867-03      | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 8868-03      |                | X               |                          | X             | X                         |                             |                  | X              |                    |
+  | 10011-03     | X              | X               |                          |               |                           |                             |                  |                |                    |
+  | 10205-03     |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 10206-03     |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 10348-03     |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 10350-03     |                |                 |                          |               | X                         |                             |                  |                |                    |
+  | 10517-03     |                | X               |                          |               |                           |                             |                  |                |                    |
+  | 11818-03     | X              | X               | X                        |               | X                         |                             |                  |                |                    |
+  | 11821-03     |                | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 11822-03     |                | X               |                          | X             |                           |                             |                  | X              |                    |
+  | 12655-03     | X              | X               | X                        | X             | X                         |                             |                  | X              |                    |
+  | 12657-03     |                | X               |                          |               | X                         |                             |                  |                |                    |
