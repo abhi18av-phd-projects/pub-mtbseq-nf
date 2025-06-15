@@ -37,12 +37,63 @@ execute:
 ```
 
 
-: {tbl-colwidths="[30,40,40,50]"}
 
-| **Principal output** | **MTBseq (standard)**  | **MTBseq-nf (default mode)** | **MTBseq-nf (parallel mode)** |
-|----------------------|--------------------------|--------------------------------|---------------------------------|
-| Classification       | No differences           | No differences                 | No differences                  |
-| SNP distance matrix  | No differences           | No differences                 | No differences                  |
-| Phylogenetic tree    | No differences           | No differences                 | No differences                  |
-| Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
-| Statistics           | Minor differences        | Minor differences              | No differences                  |
+
+```{=typst}
+
+#import "@preview/tablem:0.2.0": tablem, three-line-table
+
+#let three-line-table = tablem.with(
+  render: (columns: auto, ..args) => {
+    table(
+      columns: columns,
+      stroke: none,
+      align: left + horizon,
+      table.hline(y: 0),
+      table.hline(y: 1, stroke: .5pt),
+      ..args,
+      table.hline(),
+    )
+  }
+)
+
+```
+
+
+
+
+
+
+
+```{=typst}
+
+#import "@preview/tablem:0.2.0": tablem, three-line-table
+
+#let three-line-table = tablem.with(
+  render: (columns: auto, ..args) => {
+    table(
+      columns: columns,
+      stroke: none,
+      align: left + horizon,
+      table.hline(y: 0),
+      table.hline(y: 1),
+      ..args,
+      table.hline(),
+    )
+  }
+)
+
+```
+
+```{=typst}
+#three-line-table[
+  | *Principal output* | *MTBseq (standard)*  | *MTBseq-nf (default mode)* | *MTBseq-nf (parallel mode)* |
+  |----------------------|--------------------------|--------------------------------|---------------------------------|
+  | Classification       | No differences           | No differences                 | No differences                  |
+  | SNP distance matrix  | No differences           | No differences                 | No differences                  |
+  | Phylogenetic tree    | No differences           | No differences                 | No differences                  |
+  | Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
+  | Statistics           | Minor differences        | Minor differences              | No differences                  |
+]
+
+```

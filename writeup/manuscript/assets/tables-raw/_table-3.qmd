@@ -31,10 +31,35 @@ execute:
 \
 ```
 
-| *Number of samples* | *MTBseq-nf (default)* | *MTBseq-nf (parallel)* |
-|---------------------|-----------------------|------------------------|
-| 5                   | 0h53m0s               | 0h34m0s                |
-| 10                  | 2h2m0s                | 1h0m45s                |
-| 20                  | 4h32m0s               | 1h53m0s                |
-| 40                  | 8h57m0s               | 4h43m0s                |
-| 80                  | 18h32m0s              | 7h14m0s                |
+```{=typst}
+
+#import "@preview/tablem:0.2.0": tablem, three-line-table
+
+#let three-line-table = tablem.with(
+  render: (columns: auto, ..args) => {
+    table(
+      columns: columns,
+      stroke: none,
+      align: left + horizon,
+      table.hline(y: 0),
+      table.hline(y: 1),
+      ..args,
+      table.hline(),
+    )
+  }
+)
+
+```
+
+
+```{=typst}
+#three-line-table[
+  | *Number of samples* | *MTBseq-nf (default)* | *MTBseq-nf (parallel)* |
+  |---------------------|-----------------------|------------------------|
+  | 5                   | 0h53m0s               | 0h34m0s                |
+  | 10                  | 2h2m0s                | 1h0m45s                |
+  | 20                  | 4h32m0s               | 1h53m0s                |
+  | 40                  | 8h57m0s               | 4h43m0s                |
+  | 80                  | 18h32m0s              | 7h14m0s                |
+]
+```
