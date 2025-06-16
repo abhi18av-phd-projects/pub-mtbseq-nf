@@ -111,7 +111,7 @@ ggplot(ranges_standard_long, aes(x = SampleID, y = Difference)) +
   facet_wrap(~Parameter, scales = "free_y", ncol = 2) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Intra-modal Variations in MTBseq Standard Runs",
+  labs(title = "Intra-modal variations in MTBseq (standard) runs",
        x = "Sample ID",
        y = "Difference (SNPs)",
        caption = "Only samples with variations are shown")
@@ -165,7 +165,7 @@ ggplot(ranges_default_long, aes(x = SampleID, y = Difference)) +
     facet_wrap(~Parameter, scales = "free_y", ncol = 2) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(title = "Intra-modal Variations in MTBseq-nf (default) Runs",
+    labs(title = "Intra-modal variations in MTBseq-nf (default) runs",
              x = "Sample ID",
              y = "Difference (SNPs)",
              caption = "Only samples with variations are shown")
