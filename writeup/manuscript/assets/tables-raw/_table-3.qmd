@@ -23,7 +23,7 @@ execute:
 
 
 
-### Table 3. Growth of total execution time (runtime) of different modes of MTBseq-nf for 5 datasets with increasing cohort size.
+### Growth of total execution time (runtime) of different modes of MTBseq-nf for 5 datasets with increasing cohort size.
 
 
 ```{=typst}

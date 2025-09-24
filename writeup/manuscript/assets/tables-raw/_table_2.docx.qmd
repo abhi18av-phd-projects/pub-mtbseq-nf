@@ -1,0 +1,63 @@
+---
+title: ""
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Ubuntu"
+        keep-typ: true
+
+tbl-cap-location: top
+
+execute:
+  echo: false
+  warning: false
+
+---
+
+```{=typst}
+#set page(numbering: none)
+
+#set page("a4", flipped:true)
+
+```
+
+
+### Table 2. Summary of intra-modal analysis of principal outputs of triplicated runs. Notably, MTBseq-nf (parallel) mode does not have any differences in the principal results.
+
+
+```{=typst}
+\
+\
+```
+
+
+
+```{=typst}
+
+#import "@preview/tablem:0.2.0": tablem, three-line-table
+
+#let three-line-table = tablem.with(
+  render: (columns: auto, ..args) => {
+    table(
+      columns: columns,
+      stroke: none,
+      align: left + horizon,
+      table.hline(y: 0),
+      table.hline(y: 1),
+      ..args,
+      table.hline(),
+    )
+  }
+)
+
+```
+
+  | *Principal output* | *MTBseq (standard)*  | *MTBseq-nf (default mode)* | *MTBseq-nf (parallel mode)* |
+  |----------------------|--------------------------|--------------------------------|---------------------------------|
+  | Classification       | No differences           | No differences                 | No differences                  |
+  | SNP distance matrix  | No differences           | No differences                 | No differences                  |
+  | Phylogenetic tree    | No differences           | No differences                 | No differences                  |
+  | Cluster groups       | Consistent agglomeration | Consistent agglomeration       | Consistent agglomeration        |
+  | Statistics           | Minor differences        | Minor differences              | No differences                  |

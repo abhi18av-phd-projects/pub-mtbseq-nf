@@ -1,0 +1,71 @@
+---
+title: ""
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Ubuntu"
+        keep-typ: true
+
+tbl-cap-location: top
+
+execute:
+  echo: false
+  warning: false
+
+---
+
+```{=typst}
+#set page("a3", flipped:true)
+
+```
+
+
+### Summary of different executions of MTBseq and MTBseq-nf in the triplicated set of experiments.
+
+
+
+```{=typst}
+\
+\
+```
+
+
+```{=typst}
+
+#import "@preview/tablem:0.2.0": tablem, three-line-table
+
+#let three-line-table = tablem.with(
+  render: (columns: auto, ..args) => {
+    table(
+      columns: columns,
+      stroke: none,
+      align: left + horizon,
+      table.hline(y: 0),
+      table.hline(y: 1),
+      ..args,
+      table.hline(),
+    )
+  }
+)
+
+```
+
+
+
+```{=typst}
+  #three-line-table[
+  | **Run ID**              | **Run name**                          | **Description**    | **Notable non-default parameter** |
+  |-------------------------|---------------------------------------|--------------------|-----------------------------------|
+  | mtbseq-standard-run1    | pub-90samples-mtbseq-standard-run1    | MTBseq pipeline    |                                   |
+  | mtbseq-standard-run2    | pub-90samples-mtbseq-standard-run2    | MTBseq pipeline    |                                   |
+  | mtbseq-standard-run3    | pub-90samples-mtbseq-standard-run3    | MTBseq pipeline    |                                   |
+  | mtbseq-nf-run1          | pub-90samples-mtbseq-nf-run1          | MTBseq-nf pipeline |                                   |
+  | mtbseq-nf-run2          | pub-90samples-mtbseq-nf-run2          | MTBseq-nf pipeline |                                   |
+  | mtbseq-nf-run3          | pub-90samples-mtbseq-nf-run3          | MTBseq-nf pipeline |                                   |
+  | mtbseq-nf-parallel-run1 | pub-90samples-mtbseq-nf-parallel-run1 | MTBseq-nf pipeline | --parallel                        |
+  | mtbseq-nf-parallel-run2 | pub-90samples-mtbseq-nf-parallel-run2 | MTBseq-nf pipeline | --parallel                        |
+  | mtbseq-nf-parallel-run3 | pub-90samples-mtbseq-nf-parallel-run3 | MTBseq-nf pipeline | --parallel                        |
+]
+```

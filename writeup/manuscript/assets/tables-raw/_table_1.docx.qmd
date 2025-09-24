@@ -50,8 +50,6 @@ execute:
 ```
 
 
-```{=typst}
-#three-line-table[
   | *Theme*         | *Feature*                   |
   |-------------------|-------------------------------|
   | User-friendliness | Ease of download              |
@@ -76,6 +74,3 @@ execute:
   | Reproducibility   | Portability                   |
   | Reproducibility   | Save intermediate files       |
 
-]
-
-```
