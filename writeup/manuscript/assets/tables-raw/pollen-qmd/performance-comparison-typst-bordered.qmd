@@ -1,0 +1,33 @@
+---
+title: "Performance Metrics Comparison"
+author: ""
+
+format:
+    docx: default
+    typst:
+        mainfont: "Ubuntu"
+        keep-typ: true
+execute:
+  echo: false
+  warning: false
+
+---
+
+```{=typst}\n#set page(numbering: none)\n```\n\n# Performance Benchmark Results
+
+Performance comparison of different MTB-seq analysis methods showing runtime efficiency, memory usage, and accuracy metrics. All benchmarks were conducted on identical hardware with the same input datasets.\n\n```{=typst}\n\n// Performance-specific table functions with numeric formatting
+
+#let performance-table(content) = {
+  table(
+    columns: 4,
+    align: (left, right, right, right),
+    stroke: (x, y) => (
+      top: if y == 0 { 2pt } else if y == 1 { 1pt } else { 0.5pt },
+      bottom: if y == 0 { 0pt } else { 0.5pt },
+      left: 0pt,
+      right: 0pt
+    ),
+    fill: (x, y) => if calc.even(y) and y > 0 { rgb("#f8f9fa") },
+    ..content
+  )
+}\n\n```\n\n```{=typst}\n#bordered-table[\n  | *Method* | *Runtime (min)* | *Memory (GB)* | *Accuracy (%)* |\n  |---|---|---|---|\n  | MTB-seq v1.0 | 45 | 8.2 | 94.5 |\n  | MTB-seq v2.0 | 28 | 6.1 | 96.2 |\n  | Custom Pipeline | 67 | 12.5 | 93.8 |\n  | Reference Method | 89 | 15.3 | 92.1 |\n  | Optimized MTB-seq | 22 | 5.8 | 97.1 |\n]\n```\n

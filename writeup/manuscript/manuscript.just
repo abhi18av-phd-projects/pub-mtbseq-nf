@@ -17,12 +17,21 @@ manuscript-init: # Initialize manuscript structure
 manuscript-preview format="apaquarto-html" version="draft": # Preview HTML with live reload
     quarto preview src/index.qmd --to {{format}} --output-dir _output/{{format}}/{{version}}
 
-manuscript-render version="final": # Render manuscript DOCX and PDF
+manuscript-render-docx version="final": # Render manuscript DOCX and PDF
     quarto render src/index.qmd --to apaquarto-docx --output-dir _output/{{version}} && \
+    cp src/index.qmd _output/{{version}}/src/ && \
+    cp src/references.bib _output/{{version}}/src/
+
+
+manuscript-render-typst version="final": # Render manuscript DOCX and PDF
     quarto render src/index.qmd --to apaquarto-typst --output-dir _output/{{version}} && \
     mv src/index.typ _output/{{version}}/src/ && \
-    cp src/index.qmd _output/{{version}}/src/
+    cp src/index.qmd _output/{{version}}/src/ && \
+    cp src/references.bib _output/{{version}}/src/
 
+
+manuscript-render:
+    manuscript-render-docx manuscript-render-typst
 
 manuscript-clean: # Clean generated files
     rm -rf _output
