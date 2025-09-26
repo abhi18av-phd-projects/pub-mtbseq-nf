@@ -181,7 +181,7 @@ execute:
                                        (make-list (length columns) "---") 
                                        "|")]
                        [table-header (format "  | ~a |\\n  |~a|\\n" header-row separator-row)]
-                       [table-rows (apply string-append
+                       [table-rows (apply string-append)
                                           (map (lambda (row)
                                                  (let ([row-values (map (lambda (col)
                                                                           (let ([col-name (hash-ref col "name")])
@@ -222,7 +222,7 @@ execute:
                                                                             (~a (cdr (assoc col-name row)))))
                                                                         columns)])
                                                    (format "| ~a |\\n" (string-join row-values " | ")))
-                                               table-data))]
+                                               table-data)))
                        [table-content (string-append table-header table-rows)])
                   (string-append
                     yaml-header

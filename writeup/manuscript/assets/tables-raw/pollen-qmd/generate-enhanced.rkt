@@ -154,6 +154,10 @@ execute:
     (string-trim (load-typst-template "page-setup.typ")) "\n"
     "```\n\n"
     (string-trim (load-content-template "table-1-heading.md")) "\n\n"
+    "```{=typst}\n"
+    "\\\n"
+    "\\\n"
+    "```\n\n"
     "```{=typst}\n\n"
     (string-trim (load-typst-template (get-table-import-template style))) "\n\n"
     "```\n\n"
@@ -167,6 +171,7 @@ execute:
   (string-append
     yaml-header
     (string-trim (load-content-template "table-1-heading.md")) "\n\n"
+    "\n"
     (render-table-data table-data 'docx)))
 
 ;; Data file auto-detection if not specified

@@ -260,7 +260,7 @@ execute:
       (render-table-data table-data columns 'docx))))
 
 ;; Main generation function
-(define (generate-table table-id format style output-filename)
+(define (generate-table table-id current-format style output-filename)
   "Generate a single table"
   (let* ([config (load-table-config table-id)]
          [table-data (load-table-data table-id config)]
@@ -268,17 +268,17 @@ execute:
          [actual-style (or style default-style)]
          [prefix (hash-ref (hash-ref config "output") "filename_prefix")]
          [actual-output (or output-filename 
-                            (format "~a-~a-~a.qmd" prefix format actual-style))])
+                            (format "~a-~a-~a.qmd" prefix current-format actual-style))])
     
     (define content
       (cond
-        [(eq? format 'typst) (generate-typst-content table-id config table-data actual-style)]
-        [(eq? format 'docx) (generate-docx-content table-id config table-data)]
+        [(eq? current-format 'typst) (generate-typst-content table-id config table-data actual-style)]
+        [(eq? current-format 'docx) (generate-docx-content table-id config table-data)]
         [else (error "Unsupported output format")]))
     
     (display-to-file content actual-output #:exists 'replace)
     (printf "Generated ~a for table ~a (format: ~a, style: ~a)\\n" 
-            actual-output table-id format actual-style)
+            actual-output table-id current-format actual-style)
     actual-output))
 
 ;; Main execution logic
