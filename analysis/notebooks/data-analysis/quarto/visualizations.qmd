@@ -649,3 +649,222 @@ ranges_parallel_standard |>
   mutate(across(everything(), function(x) ifelse(x > 0,1,0))) |>
   upset()
 ```
+
+# Add after df is prepared
+
+```{r}
+agreement_between_prefixes <- function(df, numericVars, prefix1, prefix2, runs = 3, label) {
+  # For each numeric variable: for each paired run j compute range across the two ids,
+  # then take the maximum range across j=1..runs (matches your earlier logic).
+  ranges <- foreach(i = seq_along(numericVars), .combine = cbind) %do% {
+    alldiffs <- foreach(j = 1:runs, .combine = cbind) %do% {
+      ids <- c(paste0(prefix1, j), paste0(prefix2, j))
+      diffs <- df |>
+        filter(id %in% ids) |>
+        group_by(SampleID) |>
+        summarise(range = max(eval(as.symbol(numericVars[i])), na.rm = TRUE) - min(eval(as.symbol(numericVars[i])), na.rm = TRUE), .groups = "drop")
+      # return the range column (vector)
+      diffs$range
+    }
+    # per-sample maximum across paired runs
+    as.data.frame(apply(alldiffs, 1, max, na.rm = TRUE))
+  }
+  names(ranges) <- numericVars
+
+  tbl <- tibble::tibble(
+    Variable = names(ranges),
+    N_samples = nrow(ranges),
+    N_agree = apply(ranges, 2, function(x) sum(is.na(x) | x == 0)),
+    N_disagree = apply(ranges, 2, function(x) sum(!is.na(x) & x != 0))
+  ) |>
+    dplyr::mutate(Pct_agree = round(100 * N_agree / N_samples, 1))
+
+  # save CSV for downstream use
+  write.csv(tbl, file.path("analysis/data/02_intermediate", paste0("agreement-", label, ".csv")), row.names = FALSE)
+
+  tbl
+}
+
+
+```
+
+
+```{r}
+
+# Examples of usage for the three sections (insert after each relevant comparison or run here):
+
+# 1) Standard vs Default (MTBseq-nf default vs MTBseq standard)
+tbl_standard_default <- agreement_between_prefixes(
+  df = df,
+  numericVars = numericVars,
+  prefix1 = "pub_90samples_mtbseq_nf_run",
+  prefix2 = "pub_90samples_mtbseq_standard_run",
+  runs = 3,
+  label = "standard-default"
+)
+# render in-quarto
+tbl_standard_default |>
+  kableExtra::kable(align = "c") |>
+  kableExtra::kable_classic()
+
+```
+
+
+```{r}
+
+
+
+# 2) Default vs Parallel (MTBseq-nf default vs MTBseq-nf parallel)
+tbl_default_parallel <- agreement_between_prefixes(
+  df = df,
+  numericVars = numericVars,
+  prefix1 = "pub_90samples_mtbseq_nf_run",
+  prefix2 = "pub_90samples_mtbseq_nf_parallel_run",
+  runs = 3,
+  label = "default-parallel"
+)
+tbl_default_parallel |>
+  kableExtra::kable(align = "c") |>
+  kableExtra::kable_classic()
+
+
+```
+
+
+```{r}
+
+
+
+# 3) Parallel vs Standard (MTBseq-nf parallel vs MTBseq standard)
+tbl_parallel_standard <- agreement_between_prefixes(
+  df = df,
+  numericVars = numericVars,
+  prefix1 = "pub_90samples_mtbseq_nf_parallel_run",
+  prefix2 = "pub_90samples_mtbseq_standard_run",
+  runs = 3,
+  label = "parallel-standard"
+)
+tbl_parallel_standard |>
+  kableExtra::kable(align = "c") |>
+  kableExtra::kable_classic()
+
+# The returned objects (tbl_*) are available for further filtering (e.g. show only vars with < 95% agreement).
+
+```
+
+
+```{r}
+
+
+# Compute fractional changes for comparisons (fraction = diff / max_observed_value)
+# Result: per-sample fractions (NA where denominator == 0)
+compute_fractional_changes <- function(df, numericVars, ranges_df, prefix_a, prefix_b, runs = 3) {
+  # denom: per-variable, per-sample maximum observed value across the compared ids and runs
+  denom <- foreach(i = seq_along(numericVars), .combine = cbind) %do% {
+    alldmax <- foreach(j = 1:runs, .combine = cbind) %do% {
+      ids <- c(paste0(prefix_a, j), paste0(prefix_b, j))
+      vals <- df |>
+        filter(id %in% ids) |>
+        group_by(SampleID) |>
+        summarise(maxval = max(.data[[numericVars[i]]], na.rm = TRUE), .groups = "drop") |>
+        pull(maxval)
+      vals
+    }
+    as.data.frame(apply(alldmax, 1, max, na.rm = TRUE))
+  }
+  names(denom) <- numericVars
+
+  # Ensure same dimensions / order as ranges_df (ranges_* are aligned to sampleids)
+  # Compute fractions; avoid division by zero => NA
+  frac <- as.data.frame(mapply(function(r, d) {
+    out <- r / d
+    out[d == 0] <- NA_real_
+    out
+  }, ranges_df, denom, SIMPLIFY = FALSE))
+
+  names(frac) <- numericVars
+
+  # Attach SampleID
+  sample_order <- df |>
+    distinct(SampleID) |>
+    pull(SampleID)
+
+  frac_tbl <- tibble::tibble(SampleID = sample_order) |>
+    bind_cols(frac)
+
+  # Also create a summary per variable (how many samples disagree and median fractional change)
+  summary_tbl <- tibble::tibble(
+    Variable = numericVars,
+    N_samples = nrow(frac_tbl),
+    N_disagree = colSums(!is.na(frac) & (ranges_df != 0), na.rm = TRUE),
+    Median_fraction = apply(frac, 2, function(x) stats::median(x, na.rm = TRUE))
+  )
+
+  list(fraction_per_sample = frac_tbl, summary = summary_tbl)
+}
+
+
+```
+
+
+```{r}
+
+
+# Example usage for the three comparisons (place after ranges_standard_default / ranges_default_parallel / ranges_parallel_standard are computed):
+
+# 1) Standard vs Default
+res_std_def <- compute_fractional_changes(
+  df = df,
+  numericVars = numericVars,
+  ranges_df = ranges_standard_default,
+  prefix_a = "pub_90samples_mtbseq_nf_run",
+  prefix_b = "pub_90samples_mtbseq_standard_run",
+  runs = 3
+)
+res_std_def
+
+# Save per-sample fractions and summary
+write.csv(res_std_def$fraction_per_sample, "analysis/data/02_intermediate/fractions-standard-default-per-sample.csv", row.names = FALSE)
+write.csv(res_std_def$summary, "analysis/data/02_intermediate/fractions-standard-default-summary.csv", row.names = FALSE)
+
+
+
+```
+
+
+```{r}
+
+
+# 2) Default vs Parallel
+res_def_par <- compute_fractional_changes(
+  df = df,
+  numericVars = numericVars,
+  ranges_df = ranges_default_parallel,
+  prefix_a = "pub_90samples_mtbseq_nf_run",
+  prefix_b = "pub_90samples_mtbseq_nf_parallel_run",
+  runs = 3
+)
+write.csv(res_def_par$fraction_per_sample, "analysis/data/02_intermediate/fractions-default-parallel-per-sample.csv", row.names = FALSE)
+write.csv(res_def_par$summary, "analysis/data/02_intermediate/fractions-default-parallel-summary.csv", row.names = FALSE)
+
+# 3) Parallel vs Standard
+res_par_std <- compute_fractional_changes(
+  df = df,
+  numericVars = numericVars,
+  ranges_df = ranges_parallel_standard,
+  prefix_a = "pub_90samples_mtbseq_nf_parallel_run",
+  prefix_b = "pub_90samples_mtbseq_standard_run",
+  runs = 3
+)
+write.csv(res_par_std$fraction_per_sample, "analysis/data/02_intermediate/fractions-parallel-standard-per-sample.csv", row.names = FALSE)
+write.csv(res_par_std$summary, "analysis/data/02_intermediate/fractions-parallel-standard-summary.csv", row.names = FALSE)
+
+# Quick example: show variables with any disagreement and median fractional change < 0.05
+vars_small_frac <- res_def_par$summary |>
+  filter(N_disagree > 0, Median_fraction < 0.05) |>
+  pull(Variable)
+
+```
+
+
+
